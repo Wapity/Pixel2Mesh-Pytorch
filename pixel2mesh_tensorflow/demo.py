@@ -17,8 +17,8 @@
 import tensorflow as tf
 import cPickle as pickle
 from skimage import io,transform
-from p2m.api import GCN
-from p2m.utils import *
+from pixel2mesh.api import GCN
+from pixel2mesh.utils import *
 
 # Set random seed
 seed = 1024
