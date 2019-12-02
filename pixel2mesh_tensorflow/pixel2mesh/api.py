@@ -175,10 +175,9 @@ class GCN(Model):
                                             act=lambda x: x,
                                             gcn_block_id=3,
                                             placeholders=self.placeholders, logging=self.logging))
-
     def build_cnn18(self):
-		x=self.placeholders['img_inp']
-		x=tf.expand_dims(x, 0)
+	    x=self.placeholders['img_inp']
+        x=tf.expand_dims(x,0)
 #224 224
 		x=tflearn.layers.conv.conv_2d(x,16,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
 		x=tflearn.layers.conv.conv_2d(x,16,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
