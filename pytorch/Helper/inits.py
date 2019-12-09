@@ -20,24 +20,24 @@ import numpy as np
 
 def uniform(shape, scale=0.05, name=None):
     """Uniform init."""
-    initial = torch.randint(shape,low=-scale,high=scale, dtype=torch.float32 )
+    initial = torch.FloatTensor(shape).uniform_(-scale, scale)
     return initial
 
 
 def glorot(shape, name=None):
     """Glorot & Bengio (AISTATS 2010) init."""
-    init_range = np.sqrt(6.0/(shape[0]+shape[1]))
-    initial = torch.randint(shape,low=-init_range,high=init_range,dtype=torch.float32)
+    init_range = np.sqrt(6.0/(shape[0]+shape[1]).shape[0])  #not sure if correct have to check against tensorflow implementation
+    initial = torch.FloatTensor(shape).uniform_(-init_range, init_range)
     return initial
 
 
 def zeros(shape, name=None):
     """All zeros."""
-    initial = torch.zeros(shape,dtype=torch.float32)
+    initial = torch.zeros(shape.size(),dtype=torch.float32)
     return initial
 
 
 def ones(shape, name=None):
     """All ones."""
-    initial = torch.ones(shape,dtype=torch.float32)
+    initial = torch.ones(shape.size(),dtype=torch.float32)
     return initial

@@ -41,3 +41,8 @@ def ones(shape, name=None):
     """All ones."""
     initial = tf.ones(shape, dtype=tf.float32)
     return tf.Variable(initial, name=name)
+<<<<<<< Updated upstream
+=======
+
+print(glorot(ones(shape(3,4))))
+>>>>>>> Stashed changes
