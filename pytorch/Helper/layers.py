@@ -17,37 +17,40 @@
 from __future__ import division
 from Helper.inits import *
 import torch
+import sys
+import os
+sys.path.append(os.getcwd() + '/..')
+import definitions
 
-flags = torch.
 
 # global unique layer ID dictionary for layer name assignment
 _LAYER_UIDS = {}
 
 def project(img_feat, x, y, dim):
 	x1 = torch.floor(x)
-	#x2 = tf.ceil(x)
-	x2 = tf.minimum(tf.ceil(x), tf.cast(tf.shape(img_feat)[0], tf.float32) - 1)
-	y1 = tf.floor(y)
-	#y2 = tf.ceil(y)
-	y2 = tf.minimum(tf.ceil(y), tf.cast(tf.shape(img_feat)[1], tf.float32) - 1)
-	Q11 = tf.gather_nd(img_feat, tf.stack([tf.cast(x1,tf.int32), tf.cast(y1,tf.int32)],1))
-	Q12 = tf.gather_nd(img_feat, tf.stack([tf.cast(x1,tf.int32), tf.cast(y2,tf.int32)],1))
-	Q21 = tf.gather_nd(img_feat, tf.stack([tf.cast(x2,tf.int32), tf.cast(y1,tf.int32)],1))
-	Q22 = tf.gather_nd(img_feat, tf.stack([tf.cast(x2,tf.int32), tf.cast(y2,tf.int32)],1))
+	#x2 = torch.ceil(x)
+	x2 = torch.minimum(torch.ceil(x), torch.cast(torch.shape(img_feat)[0], torch.float32) - 1)
+	y1 = torch.floor(y)
+	#y2 = torch.ceil(y)
+	y2 = torch.minimum(torch.ceil(y), torch.cast(torch.shape(img_feat)[1], torch.float32) - 1)
+	Q11 = torch.gather_nd(img_feat, torch.stack([torch.cast(x1,torch.int32), torch.cast(y1,torch.int32)],1))
+	Q12 = torch.gather_nd(img_feat, torch.stack([torch.cast(x1,torch.int32), torch.cast(y2,torch.int32)],1))
+	Q21 = torch.gather_nd(img_feat, torch.stack([torch.cast(x2,torch.int32), torch.cast(y1,torch.int32)],1))
+	Q22 = torch.gather_nd(img_feat, torch.stack([torch.cast(x2,torch.int32), torch.cast(y2,torch.int32)],1))
 
-	weights = tf.multiply(tf.subtract(x2,x), tf.subtract(y2,y))
-	Q11 = tf.multiply(tf.tile(tf.reshape(weights,[-1,1]),[1,dim]), Q11)
+	weights = torch.multiply(torch.subtract(x2,x), torch.subtract(y2,y))
+	Q11 = torch.multiply(torch.tile(torch.reshape(weights,[-1,1]),[1,dim]), Q11)
 
-	weights = tf.multiply(tf.subtract(x,x1), tf.subtract(y2,y))
-	Q21 = tf.multiply(tf.tile(tf.reshape(weights,[-1,1]),[1,dim]), Q21)
+	weights = torch.multiply(torch.subtract(x,x1), torch.subtract(y2,y))
+	Q21 = torch.multiply(torch.tile(torch.reshape(weights,[-1,1]),[1,dim]), Q21)
 
-	weights = tf.multiply(tf.subtract(x2,x), tf.subtract(y,y1))
-	Q12 = tf.multiply(tf.tile(tf.reshape(weights,[-1,1]),[1,dim]), Q12)
+	weights = torch.multiply(torch.subtract(x2,x), torch.subtract(y,y1))
+	Q12 = torch.multiply(torch.tile(torch.reshape(weights,[-1,1]),[1,dim]), Q12)
 
-	weights = tf.multiply(tf.subtract(x,x1), tf.subtract(y,y1))
-	Q22 = tf.multiply(tf.tile(tf.reshape(weights,[-1,1]),[1,dim]), Q22)
+	weights = torch.multiply(torch.subtract(x,x1), torch.subtract(y,y1))
+	Q22 = torch.multiply(torch.tile(torch.reshape(weights,[-1,1]),[1,dim]), Q22)
 
-	outputs = tf.add_n([Q11, Q21, Q12, Q22])
+	outputs = torch.add_n([Q11, Q21, Q12, Q22])
 	return outputs
 
 def get_layer_uid(layer_name=''):
@@ -63,18 +66,18 @@ def get_layer_uid(layer_name=''):
 def sparse_dropout(x, keep_prob, noise_shape):
 	"""Dropout for sparse tensors."""
 	random_tensor = keep_prob
-	random_tensor += tf.random_uniform(noise_shape)
-	dropout_mask = tf.cast(tf.floor(random_tensor), dtype=tf.bool)
-	pre_out = tf.sparse_retain(x, dropout_mask)
+	random_tensor += torch.random_uniform(noise_shape)
+	dropout_mask = torch.cast(torch.floor(random_tensor), dtype=torch.bool)
+	pre_out = torch.sparse_retain(x, dropout_mask)
 	return pre_out * (1./keep_prob)
 
 
 def dot(x, y, sparse=False):
-	"""Wrapper for tf.matmul (sparse vs dense)."""
+	"""Wrapper for torch.matmul (sparse vs dense)."""
 	if sparse:
-		res = tf.sparse_tensor_dense_matmul(x, y)
+		res = torch.sparse_tensor_dense_matmul(x, y)
 	else:
-		res = tf.matmul(x, y)
+		res = torch.matmul(x, y)
 	return res
 
 
@@ -111,22 +114,22 @@ class Layer(object):
 		return inputs
 
 	def __call__(self, inputs):
-		with tf.name_scope(self.name):
+		with torch.name_scope(self.name):
 			if self.logging and not self.sparse_inputs:
-				tf.summary.histogram(self.name + '/inputs', inputs)
+				torch.summary.histogram(self.name + '/inputs', inputs)
 			outputs = self._call(inputs)
 			if self.logging:
-				tf.summary.histogram(self.name + '/outputs', outputs)
+				torch.summary.histogram(self.name + '/outputs', outputs)
 			return outputs
 
 	def _log_vars(self):
 		for var in self.vars:
-			tf.summary.histogram(self.name + '/vars/' + var, self.vars[var])
+			torch.summary.histogram(self.name + '/vars/' + var, self.vars[var])
 
 class GraphConvolution(Layer):
 	"""Graph convolution layer."""
 	def __init__(self, input_dim, output_dim, placeholders, dropout=False,
-				 sparse_inputs=False, act=tf.nn.relu, bias=True, gcn_block_id=1,
+				 sparse_inputs=False, act=torch.nn.ReLU() , bias=True, gcn_block_id=1,
 				 featureless=False, **kwargs):
 		super(GraphConvolution, self).__init__(**kwargs)
 
@@ -150,7 +153,7 @@ class GraphConvolution(Layer):
 		# helper variable for sparse dropout
 		self.num_features_nonzero = 3#placeholders['num_features_nonzero']
 
-		with tf.variable_scope(self.name + '_vars'):
+		with torch.variable_scope(self.name + '_vars'):
 			for i in range(len(self.support)):
 				self.vars['weights_' + str(i)] = glorot([input_dim, output_dim],
 														name='weights_' + str(i))
@@ -167,7 +170,7 @@ class GraphConvolution(Layer):
 		if self.sparse_inputs:
 			x = sparse_dropout(x, 1-self.dropout, self.num_features_nonzero)
 		else:
-			x = tf.nn.dropout(x, 1-self.dropout)
+			x = torch.nn.dropout(x, 1-self.dropout)
 
 		# convolve
 		supports = list()
@@ -179,7 +182,7 @@ class GraphConvolution(Layer):
 				pre_sup = self.vars['weights_' + str(i)]
 			support = dot(self.support[i], pre_sup, sparse=True)
 			supports.append(support)
-		output = tf.add_n(supports)
+		output = torch.add_n(supports)
 
 		# bias
 		if self.bias:
@@ -197,8 +200,8 @@ class GraphPooling(Layer):
 	def _call(self, inputs):
 		X = inputs
 
-		add_feat = (1/2.0) * tf.reduce_sum(tf.gather(X, self.pool_idx), 1)
-		outputs = tf.concat([X, add_feat], 0)
+		add_feat = (1/2.0) * torch.reduce_sum(torch.gather(X, self.pool_idx), 1)
+		outputs = torch.concat([X, add_feat], 0)
 
 		return outputs
 
@@ -218,23 +221,23 @@ class GraphProjection(Layer):
 
 		#h = (-Y)/(-Z)*248 + 224/2.0 - 1
 		#w = X/(-Z)*248 + 224/2.0 - 1 [28,14,7,4]
-		h = 248.0 * tf.divide(-Y, -Z) + 112.0
-		w = 248.0 * tf.divide(X, -Z) + 112.0
+		h = 248.0 * torch.divide(-Y, -Z) + 112.0
+		w = 248.0 * torch.divide(X, -Z) + 112.0
 
-		h = tf.minimum(tf.maximum(h, 0), 223)
-		w = tf.minimum(tf.maximum(w, 0), 223)
-		indeces = tf.stack([h,w], 1)
+		h = torch.minimum(torch.maximum(h, 0), 223)
+		w = torch.minimum(torch.maximum(w, 0), 223)
+		indeces = torch.stack([h,w], 1)
 
-		idx = tf.cast(indeces/(224.0/56.0), tf.int32)
-		out1 = tf.gather_nd(self.img_feat[0], idx)
-		idx = tf.cast(indeces/(224.0/28.0), tf.int32)
-		out2 = tf.gather_nd(self.img_feat[1], idx)
-		idx = tf.cast(indeces/(224.0/14.0), tf.int32)
-		out3 = tf.gather_nd(self.img_feat[2], idx)
-		idx = tf.cast(indeces/(224.0/7.00), tf.int32)
-		out4 = tf.gather_nd(self.img_feat[3], idx)
+		idx = torch.cast(indeces/(224.0/56.0), torch.int32)
+		out1 = torch.gather_nd(self.img_feat[0], idx)
+		idx = torch.cast(indeces/(224.0/28.0), torch.int32)
+		out2 = torch.gather_nd(self.img_feat[1], idx)
+		idx = torch.cast(indeces/(224.0/14.0), torch.int32)
+		out3 = torch.gather_nd(self.img_feat[2], idx)
+		idx = torch.cast(indeces/(224.0/7.00), torch.int32)
+		out4 = torch.gather_nd(self.img_feat[3], idx)
 
-		outputs = tf.concat([coord,out1,out2,out3,out4], 1)
+		outputs = torch.concat([coord,out1,out2,out3,out4], 1)
 		return outputs
 	'''
 	def _call(self, inputs):
@@ -243,11 +246,11 @@ class GraphProjection(Layer):
 		Y = inputs[:, 1]
 		Z = inputs[:, 2]
 
-		h = 250 * tf.divide(-Y, -Z) + 112
-		w = 250 * tf.divide(X, -Z) + 112
+		h = 250 * torch.divide(-Y, -Z) + 112
+		w = 250 * torch.divide(X, -Z) + 112
 
-		h = tf.minimum(tf.maximum(h, 0), 223)
-		w = tf.minimum(tf.maximum(w, 0), 223)
+		h = torch.minimum(torch.maximum(h, 0), 223)
+		w = torch.minimum(torch.maximum(w, 0), 223)
 
 		x = h/(224.0/56)
 		y = w/(224.0/56)
@@ -264,5 +267,5 @@ class GraphProjection(Layer):
 		x = h/(224.0/7)
 		y = w/(224.0/7)
 		out4 = project(self.img_feat[3], x, y, 512)
-		outputs = tf.concat([coord,out1,out2,out3,out4], 1)
+		outputs = torch.concat([coord,out1,out2,out3,out4], 1)
 		return outputs
