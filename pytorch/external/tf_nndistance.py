@@ -1,13 +1,14 @@
 # import tensorflow as tf
 # from tensorflow.python.framework import ops
 import torch
+import tf_nndistance
 import os.path as osp
-import torch.utils.cpp_extension as c_loader
+# import torch.utils.cpp_extension as c_loader
 
-base_dir = osp.dirname(osp.abspath(__file__))
+# base_dir = osp.dirname(osp.abspath(__file__))
 
 # nn_distance_module = torch.load(osp.join(base_dir, 'tf_nndistance_so.so'))
-c_loader.load('hi',osp.join(base_dir, 'tf_nndistance.cpp'))
+# c_loader.load('tf_nndistance3',osp.join(base_dir, 'tf_nndistance.cpp'))
 
 
 def nn_distance(xyz1, xyz2):
@@ -25,13 +26,13 @@ def nn_distance(xyz1, xyz2):
 	return nn_distance_module.nn_distance(xyz1,xyz2)
 
 #@tf.RegisterShape('NnDistance')
-@ops.RegisterShape('NnDistance')
+# @ops.RegisterShape('NnDistance')
 def _nn_distance_shape(op):
 	shape1=op.inputs[0].get_shape().with_rank(3)
 	shape2=op.inputs[1].get_shape().with_rank(3)
 	return [tf.TensorShape([shape1.dims[0],shape1.dims[1]]),tf.TensorShape([shape1.dims[0],shape1.dims[1]]),
 		tf.TensorShape([shape2.dims[0],shape2.dims[1]]),tf.TensorShape([shape2.dims[0],shape2.dims[1]])]
-@ops.RegisterGradient('NnDistance')
+# @ops.RegisterGradient('NnDistance')
 def _nn_distance_grad(op,grad_dist1,grad_idx1,grad_dist2,grad_idx2):
 	xyz1=op.inputs[0]
 	xyz2=op.inputs[1]

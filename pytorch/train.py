@@ -3,7 +3,6 @@ import torch.nn as nn
 import numpy as np
 import pickle
 import definitions
-from Helper.data_fetcher import Retrive_data
 from Helper.fetcher import *
 from Helper.utils import construct_feed_dict
 
@@ -24,7 +23,6 @@ data.setDaemon(True) ####
 data.start()
 
 #NN instance
-sess = nn.
 
     
 #PyTorch Config    

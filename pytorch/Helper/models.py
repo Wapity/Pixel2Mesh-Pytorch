@@ -17,6 +17,7 @@
 from __future__ import division
 import sys
 import os
+import torch
 sys.path.append(os.getcwd() + '/..')
 import definitions
 from Helper.layers import *
@@ -58,8 +59,8 @@ class Model(object):
     def build(self):
         """ Wrapper for _build() """
         #with tf.device('/gpu:0'):
-        with tf.variable_scope(self.name):
-            self._build()
+        # with tf.variable_scope(self.name):
+        #     self._build()
 
         # Build sequential resnet model
         eltwise = [3,5,7,9,11,13, 19,21,23,25,27,29, 35,37,39,41,43,45]
@@ -106,8 +107,8 @@ class Model(object):
         print("Model saved in file: %s" % save_path)
 
     def load(self, sess=None):
-        if not sess:
-            raise AttributeError("Pytorch equivelent of no session in tensorflow")
+        # if not sess:
+        #     raise AttributeError("Pytorch equivelent of no session in tensorflow")
         saver = torch.train.saver(self.vars)
         save_path = "Data/checkpoint/%s.ckpt" % self.name
         #save_path = "checks/tmp/%s.ckpt" % self.name
@@ -239,4 +240,5 @@ class GCN(Model):
             self.placeholders.update({'img_feat': [tf.squeeze(x2), torch.squeeze(x3), torch.squeeze(x4), torch.squeeze(x5)]})
             self.loss += torch.add_n(torch.get_collection(torch.GraphKeys.REGULARIZATION_LOSSES)) * 0.3
 
-h = Model.build()
+h = Model()
+h = Model.load(h)

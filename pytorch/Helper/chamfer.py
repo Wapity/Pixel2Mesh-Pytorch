@@ -17,7 +17,7 @@
 # from tensorflow.python.framework import ops
 import torch
 import os
-from external import tf_nndistance
+import tf_nndistance
 
 
 
