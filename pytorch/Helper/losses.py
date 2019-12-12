@@ -17,51 +17,53 @@
 from Helper.chamfer import *
 
 def laplace_coord(pred, placeholders, block_id):
-	vertex = torch.concat([pred, torch.zeros([1,3])], 0)
-	indices = placeholders['lape_idx'][block_id-1][:, :8]
-	weights = torch.cast(placeholders['lape_idx'][block_id-1][:,-1], torch.float32)
+     vertex = torch.concat([pred, torch.zeros([1,3])], 0)
+     indices = placeholders['lape_idx'][block_id-1][:, :8]
+     weights = torch.cast(placeholders['lape_idx'][block_id-1][:,-1], torch.float32)
 
-	weights = torch.tile(torch.reshape(torch.reciprocal(weights), [-1,1]), [1,3])
-	laplace = torch.reduce_sum(torch.gather(vertex, indices), 1)
-	laplace = torch.subtract(pred, torch.multiply(laplace, weights))
-	return laplace
+     weights = torch.tile(torch.reshape(torch.reciprocal(weights), [-1,1]), [1,3])
+     laplace = torch.reduce_sum(torch.gather(vertex, indices), 1)
+     laplace = torch.subtract(pred, torch.multiply(laplace, weights))
+     return laplace
 
 def laplace_loss(pred1, pred2, placeholders, block_id):
-	# laplace term
-	lap1 = laplace_coord(pred1, placeholders, block_id)
-	lap2 = laplace_coord(pred2, placeholders, block_id)
-	laplace_loss = torch.reduce_mean(torch.reduce_sum(torch.square(torch.subtract(lap1,lap2)), 1)) * 1500
+     # laplace term
+     lap1 = laplace_coord(pred1, placeholders, block_id)
+     lap2 = laplace_coord(pred2, placeholders, block_id)
+     laplace_loss = torch.reduce_mean(torch.reduce_sum(torch.square(torch.subtract(lap1,lap2)), 1)) * 1500
 
-	move_loss = torch.reduce_mean(torch.reduce_sum(torch.square(torch.subtract(pred1, pred2)), 1)) * 100
-	move_loss = torch.cond(torch.equal(block_id,1), lambda:0., lambda:move_loss)
-	return laplace_loss + move_loss
-	
+     move_loss = torch.reduce_mean(torch.reduce_sum(torch.square(torch.subtract(pred1, pred2)), 1)) * 100
+     move_loss = torch.cond(torch.equal(block_id,1), lambda:0., lambda:move_loss)
+     return laplace_loss + move_loss
+     
 def unit(tensor):
-	return torch.nn.l2_normalize(tensor, dim=1)
+     return torch.nn.l2_normalize(tensor, dim=1)
 
-def mesh_loss(pred, placeholders, block_id):
-	gt_pt = placeholders['labels'][:, :3] # gt points
-	gt_nm = placeholders['labels'][:, 3:] # gt normals
+def mesh_loss(pred, feed_dict, block_id):   #pretty sure ft_pt is wrong, but dont know what it is meant to look like
+    # gt_pt = feed_dict.get("labels")[:, :3] # gt points
+    gt_pt = [0,0,0]
+    # gt_nm = feed_dict.get('labels')[:, 3:] # gt normals
+    # print(gt_nm)
+                           
+    # edge in graph
+    nod1 = torch.gather(torch.tensor(pred),0, torch.LongTensor(feed_dict.get('edges')[block_id-1][0]))
+    nod2 = torch.gather(torch.tensor(pred),0, torch.LongTensor(feed_dict.get('edges')[block_id-1][1]))
+    edge = torch.sub(nod1, nod2)
 
-	# edge in graph
-	nod1 = torch.gather(pred, placeholders['edges'][block_id-1][:,0])
-	nod2 = torch.gather(pred, placeholders['edges'][block_id-1][:,1])
-	edge = torch.subtract(nod1, nod2)
+    # edge length loss
+    edge_length = torch.cumsum(torch.mul(edge,edge), 0)
+    edge_loss = torch.mean(edge_length) * 300
 
-	# edge length loss
-	edge_length = torch.reduce_sum(torch.square(edge), 1)
-	edge_loss = torch.reduce_mean(edge_length) * 300
+    # chamer distance
+    dist1,idx1,dist2,idx2 = nn_distance(gt_pt, pred)
+    point_loss = (torch.reduce_mean(dist1) + 0.55*torch.reduce_mean(dist2)) * 3000
 
-	# chamer distance
-	dist1,idx1,dist2,idx2 = nn_distance(gt_pt, pred)
-	point_loss = (torch.reduce_mean(dist1) + 0.55*torch.reduce_mean(dist2)) * 3000
+    # normal cosine loss
+    normal = torch.gather(gt_nm, torch.squeeze(idx2, 0))
+    normal = torch.gather(normal, placeholders['edges'][block_id-1][:,0])
+    cosine = torch.abs(torch.reduce_sum(torch.multiply(unit(normal), unit(edge)), 1))
+    # cosine = torch.where(torch.greater(cosine,0.866), torch.zeros_like(cosine), cosine) # truncated
+    normal_loss = torch.reduce_mean(cosine) * 0.5
 
-	# normal cosine loss
-	normal = torch.gather(gt_nm, torch.squeeze(idx2, 0))
-	normal = torch.gather(normal, placeholders['edges'][block_id-1][:,0])
-	cosine = torch.abs(torch.reduce_sum(torch.multiply(unit(normal), unit(edge)), 1))
-	# cosine = torch.where(torch.greater(cosine,0.866), torch.zeros_like(cosine), cosine) # truncated
-	normal_loss = torch.reduce_mean(cosine) * 0.5
-
-	total_loss = point_loss + edge_loss + normal_loss
-	return total_loss
+    total_loss = point_loss + edge_loss + normal_loss
+    return total_loss

@@ -23,6 +23,10 @@ import definitions
 from Helper.layers import *
 from Helper.losses import *
 
+#testing
+from Helper.utils import construct_feed_dict
+import pickle
+
 class Model(object):
     def __init__(self, **kwargs):
         allowed_kwargs = {'name', 'logging'}
@@ -37,7 +41,7 @@ class Model(object):
         self.logging = logging
 
         self.vars = {}
-        self.placeholders = {}
+        self.dict = {}
 
         self.layers = []
         self.activations = []
@@ -56,7 +60,7 @@ class Model(object):
     def _build(self):
         raise NotImplementedError
 
-    def build(self):
+    def build(self):    #Dont know if correct but self.activations[0][15] was previosu changed to self.activations[0][0][15], could also just make = and not append to solve
         """ Wrapper for _build() """
         #with tf.device('/gpu:0'):
         # with tf.variable_scope(self.name):
@@ -66,27 +70,29 @@ class Model(object):
         eltwise = [3,5,7,9,11,13, 19,21,23,25,27,29, 35,37,39,41,43,45]
         concat = [15, 31]
         self.activations.append(self.inputs)
+        # print(self.activations[0][15])
         for idx,layer in enumerate(self.layers):
-            hidden = layer(self.activations[-1])
+            hidden = layer(self.activations[0][-1])
             if idx in eltwise:
-                hidden = torch.add(hidden,self.activations[-2])*0.5
+                hidden = torch.add(hidden,self.activations[0][-2])*0.5
             if idx in concat:
-                hidden = torch.concat([hidden, self.activations[-2]], 1)
-            self.activations.append(hidden)
+                hidden = torch.concat([hidden, self.activations[0][-2]], 1)
+            self.activations[0].append(hidden)
 
-        self.output1 = self.activations[15]
-        unpool_layer = GraphPooling(placeholders=self.placeholders, pool_id=1)
+        self.output1 = self.activations[0][15]
+        unpool_layer = GraphPooling(placeholders=self.dict, pool_id=1)
         self.output1_2 = unpool_layer(self.output1)
 
-        self.output2 = self.activations[31]
-        unpool_layer = GraphPooling(placeholders=self.placeholders, pool_id=2)
+        self.output2 = self.activations[0][31]
+        unpool_layer = GraphPooling(placeholders=self.dict, pool_id=2)
         self.output2_2 = unpool_layer(self.output2)
 
-        self.output3 = self.activations[-1]
+        self.output3 = self.activations[0][-1]
 
         # Store model variables for easy access
-        variables = torch.get_collection(torch.GraphKeys.GLOBAL_VARIABLES,scope=self.name)
-        self.vars = {var.name: var for var in variables}
+        # # variables = torch.get_collection(torch.GraphKeys.GLOBAL_VARIABLES,scope=self.name)
+        # variables = self.vars
+        # self.vars = {var.name: var for var in variables}
 
         # Build metrics
         self._loss()
@@ -100,30 +106,38 @@ class Model(object):
         raise NotImplementedError
 
     def save(self, sess=None):
-        if not sess:
-            raise AttributeError("Pytorch equivelent of no session in tensorflow")
-        saver = torch.train.Saver(self.vars)
-        save_path = saver.save(sess, "Data/checkpoint/%s.ckpt" % self.name)
+        #Save the model
+        
+        #Get complete path
+        path = os.getcwd()
+        index = path.find("pytorch")
+        save_path = path[0:index] + "pytorch/Data/checkpoint/%s.pt" % self.name
+    
+        torch.save(self,save_path)
         print("Model saved in file: %s" % save_path)
 
     def load(self, sess=None):
-        # if not sess:
-        #     raise AttributeError("Pytorch equivelent of no session in tensorflow")
-        saver = torch.train.saver(self.vars)
-        save_path = "Data/checkpoint/%s.ckpt" % self.name
-        #save_path = "checks/tmp/%s.ckpt" % self.name
-        saver.restore(sess, save_path)
-        print("Model restored from file: %s" % save_path)
+        #Restore model from path
+
+        #Get complete path
+        path = os.getcwd()
+        index = path.find("pytorch")
+        load_path = path[0:index] + "pytorch/Data/checkpoint/%s.pt" % self.name
+        
+        self = torch.load(load_path)
+        print("Model restored from file: %s" % load_path)
+    #end
 
 class GCN(Model):
-    def __init__(self, placeholders, **kwargs):
+    def __init__(self, feed_dict, **kwargs):
         super(GCN, self).__init__(**kwargs)
-
-        self.inputs = placeholders['features']
-        self.placeholders = placeholders
+        
+        self.inputs = feed_dict.get("features")
+        self.dict = feed_dict
 
         # self.optimizer = tf.train.AdamOptimizer(learning_rate=FLAGS.learning_rate)
-        self.optimizer = torch.train.AdamOptimizer(learning_rate = definitions.learning_rate)
+        # self.optimizer = torch.train.AdamOptimizer(learning_rate = definitions.learning_rate)
+        # self.optimizer = torch.optim.Adam(self.inputs,lr = definitions.learning_rate)
 
         self.build()
 
@@ -132,9 +146,9 @@ class GCN(Model):
         for var in self.layers[0].vars.values():
             self.loss += FLAGS.weight_decay * tf.nn.l2_loss(var)
         '''
-        self.loss += mesh_loss(self.output1, self.placeholders, 1)
-        self.loss += mesh_loss(self.output2, self.placeholders, 2)
-        self.loss += mesh_loss(self.output3, self.placeholders, 3)
+        self.loss += mesh_loss(self.output1, self.dict, 1)
+        self.loss += mesh_loss(self.output2, self.dict, 2)
+        self.loss += mesh_loss(self.output3, self.dict, 3)
         self.loss += .1*laplace_loss(self.inputs, self.output1, self.placeholders, 1)
         self.loss += laplace_loss(self.output1_2, self.output2, self.placeholders, 2)
         self.loss += laplace_loss(self.output2_2, self.output3, self.placeholders, 3)
@@ -203,7 +217,7 @@ class GCN(Model):
                                             placeholders=self.placeholders, logging=self.logging))
 
         def build_cnn18(self):
-            x=self.placeholders['img_inp']
+            x=self.dict.get('img_inp')
             x=tf.expand_dims(x, 0)
     #224 224
             x = torch.layers.conv.conv_2d(x,16,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
@@ -240,5 +254,8 @@ class GCN(Model):
             self.placeholders.update({'img_feat': [tf.squeeze(x2), torch.squeeze(x3), torch.squeeze(x4), torch.squeeze(x5)]})
             self.loss += torch.add_n(torch.get_collection(torch.GraphKeys.REGULARIZATION_LOSSES)) * 0.3
 
-h = Model()
-h = Model.load(h)
+
+#testing
+pkl = pickle.load(open('../Data/ellipsoid/info_ellipsoid.dat', 'rb'),encoding = 'latin1')
+feed_dict = construct_feed_dict(pkl)
+h = GCN(feed_dict)
