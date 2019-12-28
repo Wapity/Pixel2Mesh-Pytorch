@@ -122,7 +122,15 @@ class GCN(Model):
     def _build(self):
         self.build_cnn18() #update image feature
 		# first project block
+        # tsr = []
+        # name = 'layer_1/'
+        # idx = 0
+        # def add(t):
+        #     _n = name+'x_'+str(idx)
+        #     tsr.append((_n,t))
+        #
         self.layers.append(GraphProjection(placeholders=self.placeholders))
+        # add()
         self.layers.append(GraphConvolution(input_dim=FLAGS.feat_dim,
                                             output_dim=FLAGS.hidden,
                                             gcn_block_id=1,
@@ -138,6 +146,7 @@ class GCN(Model):
                                             gcn_block_id=1,
                                             placeholders=self.placeholders, logging=self.logging))
 		# second project block
+        # print('layer_2')
         self.layers.append(GraphProjection(placeholders=self.placeholders))
         self.layers.append(GraphPooling(placeholders=self.placeholders, pool_id=1)) # unpooling
         self.layers.append(GraphConvolution(input_dim=FLAGS.feat_dim+FLAGS.hidden,
@@ -179,35 +188,42 @@ class GCN(Model):
     def build_cnn18(self):
             x=self.placeholders['img_inp']
             x=tf.expand_dims(x, 0)
+            print('*******************', x.shape)
     #224 224
             x=tflearn.layers.conv.conv_2d(x,16,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x=tflearn.layers.conv.conv_2d(x,16,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x0=x
+            print('*******************', x.shape)
             x=tflearn.layers.conv.conv_2d(x,32,(3,3),strides=2,activation='relu',weight_decay=1e-5,regularizer='L2')
     #112 112
             x=tflearn.layers.conv.conv_2d(x,32,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x=tflearn.layers.conv.conv_2d(x,32,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x1=x
+            print('*******************', x.shape)
             x=tflearn.layers.conv.conv_2d(x,64,(3,3),strides=2,activation='relu',weight_decay=1e-5,regularizer='L2')
     #56 56
             x=tflearn.layers.conv.conv_2d(x,64,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x=tflearn.layers.conv.conv_2d(x,64,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x2=x
+            print('*******************', x.shape)
             x=tflearn.layers.conv.conv_2d(x,128,(3,3),strides=2,activation='relu',weight_decay=1e-5,regularizer='L2')
     #28 28
             x=tflearn.layers.conv.conv_2d(x,128,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x=tflearn.layers.conv.conv_2d(x,128,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x3=x
+            print('*******************', x.shape)
             x=tflearn.layers.conv.conv_2d(x,256,(5,5),strides=2,activation='relu',weight_decay=1e-5,regularizer='L2')
     #14 14
             x=tflearn.layers.conv.conv_2d(x,256,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x=tflearn.layers.conv.conv_2d(x,256,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x4=x
+            print('*******************', x.shape)
             x=tflearn.layers.conv.conv_2d(x,512,(5,5),strides=2,activation='relu',weight_decay=1e-5,regularizer='L2')
     #7 7
             x=tflearn.layers.conv.conv_2d(x,512,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x=tflearn.layers.conv.conv_2d(x,512,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x=tflearn.layers.conv.conv_2d(x,512,(3,3),strides=1,activation='relu',weight_decay=1e-5,regularizer='L2')
             x5=x
+            print('*******************', x.shape)
     #updata image feature
             self.placeholders.update({'img_feat': [tf.squeeze(x2), tf.squeeze(x3), tf.squeeze(x4), tf.squeeze(x5)]})

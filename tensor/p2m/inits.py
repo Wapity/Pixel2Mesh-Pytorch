@@ -27,7 +27,6 @@ def uniform(shape, scale=0.05, name=None):
 def glorot(shape, name=None):
     """Glorot & Bengio (AISTATS 2010) init."""
     init_range = np.sqrt(6.0/(shape[0]+shape[1]))
-    print('here'+ str(init_range))
     initial = tf.random_uniform(shape, minval=-init_range, maxval=init_range, dtype=tf.float32)
     return tf.Variable(initial, name=name)
 
@@ -42,10 +41,3 @@ def ones(shape, name=None):
     """All ones."""
     initial = tf.ones(shape, dtype=tf.float32)
     return tf.Variable(initial, name=name)
-
-array = tf.random.uniform(
-    [3,4],
-    dtype=tf.dtypes.float32
-)
-print(array)
-with tf.Session() as sess: print(glorot(array).eval())

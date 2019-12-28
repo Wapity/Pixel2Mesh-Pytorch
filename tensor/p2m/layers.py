@@ -130,7 +130,6 @@ class GraphConvolution(Layer):
 				 sparse_inputs=False, act=tf.nn.relu, bias=True, gcn_block_id=1,
 				 featureless=False, **kwargs):
 		super(GraphConvolution, self).__init__(**kwargs)
-
 		if dropout:
 			self.dropout = placeholders['dropout']
 		else:
@@ -143,7 +142,7 @@ class GraphConvolution(Layer):
 				self.support = placeholders['support2']
 		elif gcn_block_id == 3:
 				self.support = placeholders['support3']
-			
+
 		self.sparse_inputs = sparse_inputs
 		self.featureless = featureless
 		self.bias = bias
@@ -162,6 +161,9 @@ class GraphConvolution(Layer):
 			self._log_vars()
 
 	def _call(self, inputs):
+		print('graph_convolution')
+		print('inputs',inputs)
+
 		x = inputs
 
 		# dropout
@@ -185,22 +187,27 @@ class GraphConvolution(Layer):
 		# bias
 		if self.bias:
 			output += self.vars['bias']
-
+		print('output',self.act(output))
 		return self.act(output)
 
 class GraphPooling(Layer):
 	"""Graph Pooling layer."""
 	def __init__(self, placeholders, pool_id=1, **kwargs):
 		super(GraphPooling, self).__init__(**kwargs)
-
+		self.placeholders = placeholders['pool_idx']
 		self.pool_idx = placeholders['pool_idx'][pool_id-1]
 
 	def _call(self, inputs):
+		print('______graph_pooling')
+		print('inputs',tf.shape(inputs))
+		print('placeholder',self.placeholders)
+		print('pool_idx',self.pool_idx)
 		X = inputs
 
 		add_feat = (1/2.0) * tf.reduce_sum(tf.gather(X, self.pool_idx), 1)
+		print('feat',add_feat)
 		outputs = tf.concat([X, add_feat], 0)
-
+		print('outputs',outputs)
 		return outputs
 
 class GraphProjection(Layer):
@@ -209,7 +216,8 @@ class GraphProjection(Layer):
 		super(GraphProjection, self).__init__(**kwargs)
 
 		self.img_feat = placeholders['img_feat']
-
+		print('PLACEHOLDERS', placeholders)
+		print('IMG_FEAT', placeholders['img_feat'])
 	'''
 	def _call(self, inputs):
 		coord = inputs

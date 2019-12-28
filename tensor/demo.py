@@ -17,9 +17,8 @@
 import tensorflow as tf
 import pickle
 from skimage import io,transform
-from pixel2mesh.api import GCN
-from pixel2mesh.utils import *
-
+from p2m.api import GCN
+from p2m.utils import *
 # Set random seed
 seed = 1024
 np.random.seed(seed)
@@ -28,7 +27,7 @@ tf.set_random_seed(seed)
 # Settings
 flags = tf.app.flags
 FLAGS = flags.FLAGS
-flags.DEFINE_string('image', 'Data/examples/test.png', 'Testing image.')
+flags.DEFINE_string('image', 'Data/examples/my_car_test.jpg', 'Testing image.')
 flags.DEFINE_float('learning_rate', 0., 'Initial learning rate.')
 flags.DEFINE_integer('hidden', 256, 'Number of units in  hidden layer.')
 flags.DEFINE_integer('feat_dim', 963, 'Number of units in perceptual feature layer.')
@@ -50,8 +49,10 @@ placeholders = {
     'lape_idx': [tf.placeholder(tf.int32, shape=(None, 10)) for _ in range(num_blocks)], # helper for laplacian regularization
     'pool_idx': [tf.placeholder(tf.int32, shape=(None, 2)) for _ in range(num_blocks-1)] # helper for graph unpooling
 }
+#creation of model
 model = GCN(placeholders, logging=True)
 
+#loading image function
 def load_image(img_path):
 	img = io.imread(img_path)
 	if img.shape[2] == 4:
@@ -63,16 +64,16 @@ def load_image(img_path):
 
 # Load data, initialize session
 config=tf.ConfigProto()
-config.gpu_options.allow_growth=True
-config.allow_soft_placement=True
+config.gpu_options.allow_growth=False
+config.allow_soft_placement=False
 sess = tf.Session(config=config)
 sess.run(tf.global_variables_initializer())
 model.load(sess)
 
 # Runing the demo
-pkl = pickle.load(open('Data/ellipsoid/info_ellipsoid.dat','rb'),encoding='bytes')
+pkl = pickle.load(open('Data/ellipsoid/info_ellipsoid.dat','rb'))
 feed_dict = construct_feed_dict(pkl, placeholders)
-
+# print("*************************************", FLAGS.image)
 img_inp = load_image(FLAGS.image)
 feed_dict.update({placeholders['img_inp']: img_inp})
 feed_dict.update({placeholders['labels']: np.zeros([10,6])})
@@ -81,7 +82,7 @@ vert = sess.run(model.output3, feed_dict=feed_dict)
 vert = np.hstack((np.full([vert.shape[0],1], 'v'), vert))
 face = np.loadtxt('Data/ellipsoid/face3.obj', dtype='|S32')
 mesh = np.vstack((vert, face))
-pred_path = FLAGS.image.replace('.png', '.obj')
+pred_path = FLAGS.image.replace('.png', '.obj') #replace doesnt work?
 np.savetxt(pred_path, mesh, fmt='%s', delimiter=' ')
 
 print ('Saved to', pred_path)
