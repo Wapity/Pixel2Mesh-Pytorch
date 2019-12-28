@@ -2,8 +2,8 @@ import torch
 import numpy as np
 import pickle
 from skimage import io, transform
-from p2m.api import GCN
-#from p2m.api_resnet import GCN
+#from p2m.api import GCN
+from p2m.api_resnet import GCN
 from p2m.utils import *
 #import argparse
 

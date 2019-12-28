@@ -148,72 +148,155 @@ class GCN(Model):
                 self.proj_layers.append(layer)
 
     def build_resnet(self):
-        self.layer_init = nn.Conv2d(3,16, 7, 1, padding = 3)
+        self.cnn_layers_01 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(3, 16, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_02 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(16, 16, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_0 = nn.Sequential(self.cnn_layers_01,self.cnn_layers_02)
 
-        self.activ = nn.ReLU()
-        self.layer0_1 = nn.Conv2d(16,32,3,2,1)
-        self.layer0_2 = nn.Conv2d(32,32,3,1,1)
-        self.layer0_3 = nn.Conv2d(32,32,3,1,1)
+        self.cnn_layers_11 = [
+            nn.ZeroPad2d((0, 1, 0, 1)),
+            nn.Conv2d(16, 32, 3, 2, padding=0),
+            nn.ReLU()
+        ]
+        #112 112
+        self.cnn_layers_12 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(32, 32, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_13 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(32, 32, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_1 = nn.Sequential(self.cnn_layers_11,self.cnn_layers_12,self.cnn_layers_13)
 
-        self.layer1_1 = nn.Conv2d(32,64,3,2,1)
-        self.layer1_2 = nn.Conv2d(64,64,3,1,1)
-        self.layer1_3 = nn.Conv2d(64,64,3,1,1)
+        self.cnn_layers_21 = [
+            nn.ZeroPad2d((0, 1, 0, 1)),
+            nn.Conv2d(32, 64, 3, 2, padding=0),
+            nn.ReLU()
+        ]
+        #56 56
+        self.cnn_layers_22 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(64, 64, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_23 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(64, 64, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_2 = nn.Sequential(self.cnn_layers_21,self.cnn_layers_22,self.cnn_layers_23)
 
-        self.layer2_1 = nn.Conv2d(64,128,3,2,1)
-        self.layer2_2 = nn.Conv2d(128,128,3,1,1)
-        self.layer2_3 = nn.Conv2d(128,128,3,1,1)
+        self.cnn_layers_31 = [
+            nn.ZeroPad2d((0, 1, 0, 1)),
+            nn.Conv2d(64, 128, 3, 2, padding=0),
+            nn.ReLU()
+        ]
+        #28 28
+        self.cnn_layers_32 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(128, 128, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_33 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(128, 128, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_3 = nn.Sequential(self.cnn_layers_31,self.cnn_layers_32,self.cnn_layers_33)
 
-        self.layer3_1 = nn.Conv2d(128,256,5,2,2)
-        self.layer3_2 = nn.Conv2d(256,256,3,1,1)
-        self.layer3_3 = nn.Conv2d(256,256,3,1,1)
+        self.cnn_layers_41 = [
+            nn.ZeroPad2d((1, 2, 1, 2)),
+            nn.Conv2d(128, 256, 5, 2, padding=0),
+            nn.ReLU()
+        ]
+        #14 14
+        self.cnn_layers_42 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(256, 256, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_43 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(256, 256, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_4 = nn.Sequential(self.cnn_layers_41,self.cnn_layers_42,self.cnn_layers_43)
 
-        self.layer4_1 = nn.Conv2d(256,512,5,2,2)
-        self.layer4_2 = nn.Conv2d(512,512,3,1,1)
-        self.layer4_3 = nn.Conv2d(512,512,3,1,1)
-
-        self.layer_final = nn.Conv2d(512,512,3,1,1)
+        self.cnn_layers_51 = [
+            nn.ZeroPad2d((1, 2, 1, 2)),
+            nn.Conv2d(256, 512, 5, 2, padding=0),
+            nn.ReLU()
+        ]
+        #7 7
+        self.cnn_layers_52 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(512, 512, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_53 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(512, 512, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_54 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(512, 512, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_5 = nn.Sequential(self.cnn_layers_51, self.cnn_layers_52,
+                                           self.cnn_layers_53,self.cnn_layers_54)
 
 
     def forward_resnet(self, img_inp):
         x = img_inp
 
-        x = self.activ(self.layer_init(x))
+        x = self.cnn_layers_0(x)
         x0 = x
         print(x.shape)
 
-        x = self.activ(self.layer0_1(x))
+        x = self.cnn_layers_11(x)
         x_res = x
-        x = self.activ(self.layer0_2(x))
-        x = self.activ(self.layer0_3(x)) + x_res
+        x = self.cnn_layers_12(x)
+        x = self.cnn_layers_13(x) + x_res
         print(x.shape)
         x1 = x
 
-        x =  self.activ(self.layer1_1(x))
+        x =  self.cnn_layers_21(x)
         x_res = x
-        x = self.activ(self.layer1_2(x))
-        x = self.activ(self.layer1_3(x)) + x_res
+        x = self.cnn_layers_22(x)
+        x = self.cnn_layers_23(x) + x_res
         x2 = x
         print(x.shape)
 
-        x =  self.activ(self.layer2_1(x))
+        x =  self.cnn_layers_31(x)
         x_res = x
-        x = self.activ(self.layer2_2(x))
-        x = self.activ(self.layer2_3(x)) + x_res
+        x = self.cnn_layers_32(x)
+        x = self.cnn_layers_33(x) + x_res
         x3 = x
         print(x.shape)
 
-        x =  self.activ(self.layer3_1(x))
+        x =  self.cnn_layers_41(x)
         x_res = x
-        x = self.activ(self.layer3_2(x))
-        x = self.activ(self.layer3_3(x)) + x_res
+        x = self.cnn_layers_42(x)
+        x = self.cnn_layers_43(x) + x_res
         x4 = x
         print(x.shape)
 
-        x =  self.activ(self.layer4_1(x))
+        x =  self.cnn_layers_51(x)
         x_res = x
-        x = self.activ(self.layer4_2(x))
-        x = self.activ(self.layer4_3(x)) + x_res
-        x = self.activ(self.layer_final(x))
+        x = self.cnn_layers_52(x)
+        x = self.cnn_layers_53(x) + x_res
+        x = self.cnn_layers_54(x)
         x5 = x
         print(x.shape)
 
