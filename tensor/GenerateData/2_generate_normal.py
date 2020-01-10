@@ -15,7 +15,7 @@ def unit(v):
     return v / norm
 
 def readFaceInfo(obj_path):
-	vert_list = np.zeros((1,3), dtype='float32') # all vertex coord   
+	vert_list = np.zeros((1,3), dtype='float32') # all vertex coord
 	face_pts = np.zeros((1,3,3), dtype='float32') # 3 vertex on triangle face
 	face_axis = np.zeros((1,3,3), dtype='float32') # x y z new axis on face plane
 	with open(obj_path, 'r') as f:
@@ -51,11 +51,11 @@ def generate_normal(pt_position, face_pts, face_axis):
 
 	for points, axis in zip(face_pts, face_axis):
 		f_org = points[0] # new axis system origin point
-		f_n = axis[2] 
-        
+		f_n = axis[2]
+
 		face_vertex_2d = np.dot(points - f_org, axis.T)[:,:2]
 
-		# check if a valid face	 
+		# check if a valid face
 		n1,n2,n3 = [np.linalg.norm(face_axis[i]) for i in range(3)]
 		if n1<0.99 or n2<0.99 or n3<0.99:
 			continue
@@ -70,17 +70,17 @@ def generate_normal(pt_position, face_pts, face_axis):
 		for idx in vert_idx:
 			if np.linalg.norm(pt_normal[idx]) == 0:
 				p4 = transform_verts[idx][:2].reshape(1,2)
-				pt_4 = np.append(face_vertex_2d, p4, axis=0)  
+				pt_4 = np.append(face_vertex_2d, p4, axis=0)
 				hull = ConvexHull(pt_4)
 				if len(hull.vertices) == 3:
 					pt_normal[idx] = f_n * (-1)
-	
+
 	return np.hstack((pt_position, pt_normal))
 
 if __name__ == '__main__':
     vert_path = '1a0bc9ab92c915167ae33d942430658c/model.xyz'
     mesh_path = '1a0bc9ab92c915167ae33d942430658c/model.obj'
-    
+
     face_pts, face_axis = readFaceInfo(mesh_path)
     vert = np.loadtxt(vert_path)
     vert_with_normal = generate_normal(vert, face_pts, face_axis)

@@ -2,8 +2,7 @@ import torch
 import numpy as np
 import pickle
 from skimage import io, transform
-#from p2m.api import GCN
-from p2m.api_resnet import GCN
+from p2m.api import GCN
 from p2m.utils import *
 #import argparse
 
@@ -54,6 +53,7 @@ args.add_argument('weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
                   default=5e-6)
+args.add_argument('cnn_type', help='CNN TYPE', type=str, default='RES')
 
 FLAGS = args
 # Define tensors(dict) and model
@@ -93,9 +93,8 @@ def load_image(img_path):
 img_inp = load_image(FLAGS.image)
 print('<--- Loaded image from : ', FLAGS.image)
 img_inp = torch.from_numpy(img_inp).unsqueeze(0).permute(0, 3, 1, 2)
-features = tensor_dict['features'].unsqueeze(0)
 
-output3 = model(img_inp, features)[-1]
+output3 = model(img_inp)[-1]
 vert = output3.detach().numpy()[0]
 vert = np.hstack((np.full([vert.shape[0], 1], 'v'), vert))
 face = np.loadtxt('Data/ellipsoid/face3.obj', dtype='|S32')

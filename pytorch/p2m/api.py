@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from .inits import *
 from .layers import *
-
+from .utils import *
 import tensorflow as tf
 
 
@@ -29,9 +29,14 @@ class Model(nn.Module):
         self.unpool_layers.append(
             GraphPooling(tensor_dict=self.tensor_dict, pool_id=2))
 
-    def forward(self, img_inp, features):
-        inputs = features
-        img_feat = self.forward_cnn18(img_inp)
+    def forward(self, img_inp):
+        reshape = len(img_inp.shape) == 3
+        if reshape:
+            img_inp = img_inp.unsqueeze(0)
+        inputs = get_features(self.tensor_dict, img_inp)
+
+        img_feat = self.forward_cnn(img_inp)
+
         self._prepare(img_feat)
 
         # Build sequential resnet model
@@ -39,6 +44,7 @@ class Model(nn.Module):
             3, 5, 7, 9, 11, 13, 19, 21, 23, 25, 27, 29, 35, 37, 39, 41, 43, 45
         ]
         concat = [15, 31]
+
         activations = []
         activations.append(inputs)
 
@@ -57,7 +63,11 @@ class Model(nn.Module):
         output2_2 = self.unpool_layers[1](output2)
 
         output3 = activations[-1]
-        return output1, output1_2, output2, output2_2, output3
+        if not reshape:
+            return output1, output1_2, output2, output2_2, output3
+        else:
+            return output1.squeeze(0), output1_2.squeeze(0), output2.squeeze(
+                0), output2_2.squeeze(0), output3.squeeze(0)
 
 
 class GCN(Model):
@@ -66,12 +76,17 @@ class GCN(Model):
         super(GCN, self).__init__()
         self.tensor_dict = tensor_dict
         self.args = args
-
+        if self.args.cnn_type == 'VGG':
+            self.forward_cnn = self.forward_vgg
+            self.build_cnn = self.build_vgg
+        else:
+            self.forward_cnn = self.forward_res
+            self.build_cnn = self.build_res
         self.build()
 
     def _build(self):
         FLAGS = self.args
-        self.build_cnn18()
+        self.build_cnn()
         # first project block
         self.layers.append(GraphProjection())
         self.layers.append(
@@ -147,8 +162,8 @@ class GCN(Model):
             if layer.layer_type == 'GraphProjection':
                 self.proj_layers.append(layer)
 
-    def build_cnn18(self):
-        #224 224
+    def build_vgg(self):
+        # 224 224
         self.cnn_layers_0 = []
         self.cnn_layers_0 += [
             nn.ZeroPad2d(1),
@@ -168,7 +183,7 @@ class GCN(Model):
             nn.Conv2d(16, 32, 3, 2, padding=0),
             nn.ReLU()
         ]
-        #112 112
+        # 112 112
         self.cnn_layers_1 += [
             nn.ZeroPad2d(1),
             nn.Conv2d(32, 32, 3, 1, padding=0),
@@ -187,7 +202,7 @@ class GCN(Model):
             nn.Conv2d(32, 64, 3, 2, padding=0),
             nn.ReLU()
         ]
-        #56 56
+        # 56 56
         self.cnn_layers_2 += [
             nn.ZeroPad2d(1),
             nn.Conv2d(64, 64, 3, 1, padding=0),
@@ -206,7 +221,7 @@ class GCN(Model):
             nn.Conv2d(64, 128, 3, 2, padding=0),
             nn.ReLU()
         ]
-        #28 28
+        # 28 28
         self.cnn_layers_3 += [
             nn.ZeroPad2d(1),
             nn.Conv2d(128, 128, 3, 1, padding=0),
@@ -225,7 +240,7 @@ class GCN(Model):
             nn.Conv2d(128, 256, 5, 2, padding=0),
             nn.ReLU()
         ]
-        #14 14
+        # 14 14
         self.cnn_layers_4 += [
             nn.ZeroPad2d(1),
             nn.Conv2d(256, 256, 3, 1, padding=0),
@@ -244,7 +259,7 @@ class GCN(Model):
             nn.Conv2d(256, 512, 5, 2, padding=0),
             nn.ReLU()
         ]
-        #7 7
+        # 7 7
         self.cnn_layers_5 += [
             nn.ZeroPad2d(1),
             nn.Conv2d(512, 512, 3, 1, padding=0),
@@ -262,32 +277,178 @@ class GCN(Model):
         ]
         self.cnn_layers_5 = nn.Sequential(*self.cnn_layers_5)
 
-    def forward_cnn18(self, img_inp):
+    def forward_vgg(self, img_inp):
         x = img_inp
 
         x = self.cnn_layers_0(x)
         x0 = x
-        print('x0', x0.shape)
 
         x = self.cnn_layers_1(x)
         x1 = x
-        print('x1', x1.shape)
 
         x = self.cnn_layers_2(x)
         x2 = x
-        print('x2', x2.shape)
 
         x = self.cnn_layers_3(x)
         x3 = x
-        print('x3', x3.shape)
 
         x = self.cnn_layers_4(x)
         x4 = x
-        print('x4', x4.shape)
 
         x = self.cnn_layers_5(x)
         x5 = x
-        print('x5', x5.shape)
 
+        img_feat = [x2, x3, x4, x5]
+        return img_feat
+
+    def build_res(self):
+        self.cnn_layers_01 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(3, 16, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_02 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(16, 16, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+
+        self.cnn_layers_11 = [
+            nn.ZeroPad2d((0, 1, 0, 1)),
+            nn.Conv2d(16, 32, 3, 2, padding=0),
+            nn.ReLU()
+        ]
+        # 112 112
+        self.cnn_layers_12 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(32, 32, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_13 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(32, 32, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+
+        self.cnn_layers_21 = [
+            nn.ZeroPad2d((0, 1, 0, 1)),
+            nn.Conv2d(32, 64, 3, 2, padding=0),
+            nn.ReLU()
+        ]
+        # 56 56
+        self.cnn_layers_22 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(64, 64, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_23 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(64, 64, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+
+        self.cnn_layers_31 = [
+            nn.ZeroPad2d((0, 1, 0, 1)),
+            nn.Conv2d(64, 128, 3, 2, padding=0),
+            nn.ReLU()
+        ]
+        # 28 28
+        self.cnn_layers_32 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(128, 128, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_33 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(128, 128, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+
+        self.cnn_layers_41 = [
+            nn.ZeroPad2d((1, 2, 1, 2)),
+            nn.Conv2d(128, 256, 5, 2, padding=0),
+            nn.ReLU()
+        ]
+        # 14 14
+        self.cnn_layers_42 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(256, 256, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_43 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(256, 256, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+
+        self.cnn_layers_51 = [
+            nn.ZeroPad2d((1, 2, 1, 2)),
+            nn.Conv2d(256, 512, 5, 2, padding=0),
+            nn.ReLU()
+        ]
+        # 7 7
+        self.cnn_layers_52 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(512, 512, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_53 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(512, 512, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+        self.cnn_layers_54 = [
+            nn.ZeroPad2d(1),
+            nn.Conv2d(512, 512, 3, 1, padding=0),
+            nn.ReLU()
+        ]
+
+        keys = list(self.__dict__.keys())[:]
+        for key in keys:
+            if key.startswith('cnn_layers_'):
+                setattr(self, key, nn.Sequential(*getattr(self, key)))
+        # print(list(self.state_dict().keys()))
+    def forward_res(self, img_inp):
+        x = img_inp
+
+        x = self.cnn_layers_01(x)
+        x = self.cnn_layers_02(x)
+        x0 = x
+
+        x = self.cnn_layers_11(x)
+        x_res = x
+        x = self.cnn_layers_12(x)
+        x = self.cnn_layers_13(x) + x_res
+        x1 = x
+
+        x = self.cnn_layers_21(x)
+        x_res = x
+        x = self.cnn_layers_22(x)
+        x = self.cnn_layers_23(x) + x_res
+        x2 = x
+
+        x = self.cnn_layers_31(x)
+        x_res = x
+        x = self.cnn_layers_32(x)
+        x = self.cnn_layers_33(x) + x_res
+        x3 = x
+
+        x = self.cnn_layers_41(x)
+        x_res = x
+        x = self.cnn_layers_42(x)
+        x = self.cnn_layers_43(x) + x_res
+        x4 = x
+
+        x = self.cnn_layers_51(x)
+        x_res = x
+        x = self.cnn_layers_52(x)
+        x = self.cnn_layers_53(x) + x_res
+        x = self.cnn_layers_54(x)
+        x5 = x
+
+        print('2', x2.shape)
+        print('3', x3.shape)
+        print('4', x4.shape)
+        print('5', x5.shape)
         img_feat = [x2, x3, x4, x5]
         return img_feat

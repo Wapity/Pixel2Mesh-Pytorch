@@ -61,7 +61,7 @@ class Model(object):
             self._build()
 
         # Build sequential resnet model
-        eltwise = [3,5,7,9,11,13, 19,21,23,25,27,29, 35,37,39,41,43,45]
+        eltwise = [3,5,7,9,11,13,19,21,23,25,27,29, 35,37,39,41,43,45]
         concat = [15, 31]
         self.activations.append(self.inputs)
         for idx,layer in enumerate(self.layers):

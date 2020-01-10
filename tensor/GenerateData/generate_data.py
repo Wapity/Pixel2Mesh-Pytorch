@@ -11,6 +11,12 @@ import cv2
 import trimesh
 import sklearn.preprocessing
 
+import os,sys
+import numpy as np
+import cv2
+import trimesh
+import sklearn.preprocessing
+
 def camera_info(param):
     theta = np.deg2rad(param[0])
     phi = np.deg2rad(param[1])
@@ -34,12 +40,13 @@ if __name__ == '__main__':
 
     # 1 sampling
     obj_path = '1a0bc9ab92c915167ae33d942430658c/model.obj'
-    mesh_list = trimesh.load_mesh(obj_path)
-    if not isinstance(mesh_list, list):
-        mesh_list = [mesh_list]
+    scene = trimesh.load(obj_path)  #loads a scene
+    mesh_list = scene.dump()    #convert scene to list of meshes
+
+    #Find total area of faces
     area_sum = 0
     for mesh in mesh_list:
-        area_sum += np.sum(mesh.area_faces)  #not working
+        area_sum += np.sum(mesh.area_faces)
 
     sample = np.zeros((0,3), dtype=np.float32)
     normal = np.zeros((0,3), dtype=np.float32)
