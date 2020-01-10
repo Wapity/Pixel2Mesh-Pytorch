@@ -64,18 +64,21 @@ def load(model):
     idx = 0
     state_dict = OrderedDict()
     for name, param in model.state_dict().items():
-        tf_name, tf_shape = tf_vars[idx]
+        if not 'str' in name:
+            tf_name, tf_shape = tf_vars[idx]
 
-        save_name = tf_name.replace('/', '|').replace(':', '=')
-        path = os.path.abspath('./weights/') + '/' + save_name + '.npy'
-        array = np.load(path)
-        torch_tensor = torch.from_numpy(array)
-        if len(tf_shape) == 4:
-            torch_tensor = torch_tensor.permute(3, 2, 0, 1)
-        state_dict[name] = torch_tensor
-        print('Torch : ', list(param.shape), '    - Tensorflow : ', tf_shape)
-        #print('Loading variable {} with shape {}'.format(tf_name, tf_shape))
-        idx += 1
+            save_name = tf_name.replace('/', '|').replace(':', '=')
+            path = os.path.abspath('./weights/') + '/' + save_name + '.npy'
+            array = np.load(path)
+            torch_tensor = torch.from_numpy(array)
+            if len(tf_shape) == 4:
+                torch_tensor = torch_tensor.permute(3, 2, 0, 1)
+            state_dict[name] = torch_tensor
+            #print('Torch : ', list(param.shape), '    - Tensorflow : ', tf_shape)
+            print('Loading variable {} with shape {}'.format(tf_name, tf_shape))
+            idx += 1
+        else:
+            state_dict[name] = param
     model.load_state_dict(state_dict)
     print('Model loaded from tensorflow')
 

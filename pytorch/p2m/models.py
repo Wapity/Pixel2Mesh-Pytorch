@@ -11,6 +11,7 @@ class Trainer:
     def __init__(self, tensor_dict, network, args):
         self.args = args
         self.network = network
+
         self.optimizer = optim.Adam(network.parameters(),
                                     lr=self.args.learning_rate)
         self.tensor_dict = tensor_dict

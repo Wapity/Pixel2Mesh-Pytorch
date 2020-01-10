@@ -29,14 +29,16 @@ class Model(nn.Module):
         self.unpool_layers.append(
             GraphPooling(tensor_dict=self.tensor_dict, pool_id=2))
 
-    def forward(self, img_inp):
+    def forward(self, img_inp, img_bis=None):
         reshape = len(img_inp.shape) == 3
         if reshape:
             img_inp = img_inp.unsqueeze(0)
         inputs = get_features(self.tensor_dict, img_inp)
 
-        img_feat = self.forward_cnn(img_inp)
-
+        if self.args.cnn_type != 'STR':
+            img_feat = self.forward_cnn(img_inp)
+        else:
+            img_feat = self.forward_cnn(img_inp, img_bis)
         self._prepare(img_feat)
 
         # Build sequential resnet model
@@ -79,9 +81,12 @@ class GCN(Model):
         if self.args.cnn_type == 'VGG':
             self.forward_cnn = self.forward_vgg
             self.build_cnn = self.build_vgg
-        else:
+        elif self.args.cnn_type == 'RES':
             self.forward_cnn = self.forward_res
             self.build_cnn = self.build_res
+        elif self.args.cnn_type == 'STR':
+            self.forward_cnn = self.forward_str
+            self.build_cnn = self.build_str
         self.build()
 
     def _build(self):
@@ -450,5 +455,27 @@ class GCN(Model):
         print('3', x3.shape)
         print('4', x4.shape)
         print('5', x5.shape)
+        img_feat = [x2, x3, x4, x5]
+        return img_feat
+
+    def build_str(self):
+        self.build_vgg()
+        self.str_cnn_2 = nn.Sequential(nn.Conv2d(128, 64, 3, padding=1),
+                                       nn.ReLU())
+        self.str_cnn_3 = nn.Sequential(nn.Conv2d(256, 128, 3, padding=1),
+                                       nn.ReLU())
+        self.str_cnn_4 = nn.Sequential(nn.Conv2d(512, 256, 3, padding=1),
+                                       nn.ReLU())
+        self.str_cnn_5 = nn.Sequential(nn.Conv2d(1024, 512, 3, padding=1),
+                                       nn.ReLU())
+
+    def forward_str(self, img_inp, img_bis):
+        features_1 = self.forward_vgg(img_inp)
+        features_2 = self.forward_vgg(img_bis)
+
+        x2 = self.str_cnn_2(torch.cat((features_1[0], features_2[0]), 1))
+        x3 = self.str_cnn_3(torch.cat((features_1[1], features_2[1]), 1))
+        x4 = self.str_cnn_4(torch.cat((features_1[2], features_2[2]), 1))
+        x5 = self.str_cnn_5(torch.cat((features_1[3], features_2[3]), 1))
         img_feat = [x2, x3, x4, x5]
         return img_feat
