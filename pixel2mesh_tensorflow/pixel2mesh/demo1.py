@@ -70,11 +70,7 @@ sess.run(tf.global_variables_initializer())
 model.load(sess)
 
 # Runing the demo
-# pkl = pickle.load(open('Data/ellipsoid/info_ellipsoid.dat', 'rb'))
-
-with open('Data/ellipsoid/info_ellipsoid.dat', 'rb') as f:
-    pkl = pickle.load(f, encoding='latin1') 
-    
+pkl = pickle.load(open('Data/ellipsoid/info_ellipsoid.dat', 'rb'))
 feed_dict = construct_feed_dict(pkl, placeholders)
 
 img_inp = load_image(FLAGS.image)
