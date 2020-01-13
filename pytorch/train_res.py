@@ -82,8 +82,8 @@ print('---- Model Created')
 trainer = Trainer(tensor_dict, model, args)
 print('---- Trainer Created')
 
-img_inp = torch.randn((224, 224, 3)).permute(2, 0, 1).float()
-labels = torch.zeros((156, 6))
+img_inp = torch.randn((224, 224, 3)).permute(2, 0, 1).float()  #to change by real input
+labels = torch.zeros((156, 6)) #to change by real input
 trainer.optimizer_step(img_inp, labels)
 
 train_number = 0  #data.number
