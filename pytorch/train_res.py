@@ -103,10 +103,11 @@ print('---- Trainer Created')
 print('---- Training ...')
 print('\n')
 for epoch in range(FLAGS.epochs):
-    epoch_dir = mydir + '/epoch_{}'.format(epoch + 1)
-    os.makedirs(epoch_dir)
-    os.makedirs(epoch_dir + '/outputs')
-    print('-------- Folder created : {}'.format(epoch_dir))
+    if epoch%50 ==0 :
+        epoch_dir = mydir + '/epoch_{}'.format(epoch + 1)
+        os.makedirs(epoch_dir)
+        os.makedirs(epoch_dir + '/outputs')
+        print('-------- Folder created : {}'.format(epoch_dir))
     all_loss = np.zeros(train_number, dtype='float32')
     print('-------- Training epoch {} ...'.format(epoch + 1))
     for iters in range(train_number):
@@ -120,14 +121,15 @@ for epoch in range(FLAGS.epochs):
                 '------------ Iteration = {}, mean loss = {:.2f}, iter loss = {:.2f}'
                 .format(iters + 1, mean_loss, dists))
     print('-------- Training epoch {} done !'.format(epoch + 1))
-    ckp_dir = epoch_dir + '/checkpoint.pt'
-    torch.save(model.state_dict(), ckp_dir)
-    print('-------- Training epoch {} checkoing saved !'.format(epoch + 1))
-    print('-------- Testing epoch {} ...'.format(epoch + 1))
-    for id, img_test in test_list:
-        output3 = model(img_test)[-1]
-        mesh = process_output(output3)
-        pred_path = epoch_dir + '/outputs/' + id + '.obj'
-        np.savetxt(pred_path, mesh, fmt='%s', delimiter=' ')
-    print('-------- Testing epoch {} done !'.format(epoch + 1))
-    print('\n')
+    if epoch%50 ==0 :
+        ckp_dir = epoch_dir + '/checkpoint.pt'
+        torch.save(model.state_dict(), ckp_dir)
+        print('-------- Training epoch {} checkoing saved !'.format(epoch + 1))
+        print('-------- Testing epoch {} ...'.format(epoch + 1))
+        for id, img_test in test_list:
+            output3 = model(img_test)[-1]
+            mesh = process_output(output3)
+            pred_path = epoch_dir + '/outputs/' + id + '.obj'
+            np.savetxt(pred_path, mesh, fmt='%s', delimiter=' ')
+        print('-------- Testing epoch {} done !'.format(epoch + 1))
+        print('\n')
