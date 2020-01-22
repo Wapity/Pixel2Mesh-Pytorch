@@ -5,13 +5,18 @@ Put ShapeNetP2M in the data/training_data folder
 
 Run train_res to train the ResNet+GCN with a single image or train_str to train the ResNet+GCN with two images
 To train one can specify parameters, type
-'''python train_res.py --help'''
+```bash
+python train_res.py --help
+```
 or
-'''python train_str.py --help'''
+```bash
+python train_str.py --help
+```
 to check available parameters.
 These parameters can be added directly in the console, e.g for training 10 epochs :
-'''python train_res.py --epochs 10'''
-
+```bash
+python train_res.py --epochs 10
+```
 When training train_res checkpoints are saved and outputs are created after each epoch
 When training train_str just checkpoints are created
 
