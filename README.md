@@ -24,11 +24,11 @@ These parameters can be added directly in the console, e.g for training 10 epoch
 ```bash
 python train_res.py --epochs 10
 ```
-When training train_res checkpoints are saved and outputs are created after each epoch
-When training train_str just checkpoints are created
+When training train_res checkpoints are saved and outputs are created after each epoch.
+When training train_str just checkpoints are created.
 
 The demos can be run using any of the previous checkpoints created with the good network and create meshes
-into data/outputs folder
+into data/outputs folder.
 
-The demo with VGG is running by transfer of the tensorflow weights (checkpoints/tf_vgg_checkpoint.pt)
-For training Res and Str, the initialization is made with the same weights (ckeckpoints/)
+The demo with VGG is running by transfer of the tensorflow weights (checkpoints/tf_vgg_checkpoint.pt).
+For training Res and Str, the initialization is made with the same weights (ckeckpoints/).
