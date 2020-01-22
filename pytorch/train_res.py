@@ -19,11 +19,11 @@ args = argparse.ArgumentParser()
 args.add_argument('--training_data',
                   help='Training data.',
                   type=str,
-                  default='data/training_data/train_list.txt')
+                  default='data_folder/training_data/train_list.txt')
 args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
-                  default='data/testing_data/test_list.txt')
+                  default='data_folder/testing_data/test_list.txt')
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
@@ -47,11 +47,11 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='data/checkpoints/tf_res_from_vgg.pt')
+                  default='data_folder/checkpoints/tf_res_from_vgg.pt')
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
-                  default='data/ellipsoid/info_ellipsoid.dat')
+                  default='data_folder/ellipsoid/info_ellipsoid.dat')
 args.add_argument('--hidden',
                   help='Number of units in  hidden layer.',
                   type=int,
