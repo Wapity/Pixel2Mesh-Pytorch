@@ -1,1 +1,1 @@
-Data/training_data/abcd/rendering/01.dat
+data/training_data/abcd/rendering/01.dat
