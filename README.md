@@ -3,7 +3,14 @@
 
 Put ShapeNetP2M in the data/training_data folder
 
-Run train_res to train the ResNet+GCN with a single image or train_str to train the ResNet+GCN with two images
+To train the ResNet+GCN with a single image :
+```bash
+python train_res.py 
+```
+or train_str to train the ResNet+GCN with two images :
+```bash
+python str_res.py 
+```
 To train one can specify parameters, type
 ```bash
 python train_res.py --help
