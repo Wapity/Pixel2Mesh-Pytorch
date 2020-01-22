@@ -16,7 +16,7 @@ args = argparse.ArgumentParser()
 args.add_argument('--image',
                   help='Testing image.',
                   type=str,
-                  default='data_folder/examples/square.png')
+                  default='data/examples/square.png')
 args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
@@ -24,11 +24,11 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='data_folder/checkpoints/tf_res_from_vgg.pt')
+                  default='data/checkpoints/tf_res_from_vgg.pt')
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
-                  default='data_folder/ellipsoid/info_ellipsoid.dat')
+                  default='data/ellipsoid/info_ellipsoid.dat')
 args.add_argument('--hidden',
                   help='Number of units in  hidden layer.',
                   type=int,

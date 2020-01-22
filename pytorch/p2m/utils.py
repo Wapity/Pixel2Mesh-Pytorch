@@ -96,6 +96,6 @@ def process_input(img_inp, y_train):
 def process_output(output3):
     vert = output3.detach().numpy()[0]
     vert = np.hstack((np.full([vert.shape[0], 1], 'v'), vert))
-    face = np.loadtxt('data_folder/ellipsoid/face3.obj', dtype='|S32')
+    face = np.loadtxt('data/ellipsoid/face3.obj', dtype='|S32')
     mesh = np.vstack((vert, face))
     return mesh
