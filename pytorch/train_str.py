@@ -20,7 +20,9 @@ args.add_argument('--training_data',
                   help='Training data.',
                   type=str,
                   default='data/training_data/train_list_str.txt')
-# args.add_argument('--testing_data',
+
+"(Test with demo and loading checkpoint)"
+# args.add_argument('--testing_data',  
 #                   help='Testing data.',
 #                   type=str,
 #                   default='data/testing_data/test_list.txt')

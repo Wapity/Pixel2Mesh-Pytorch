@@ -1,12 +1,1 @@
 Data/training_data/abcd/rendering/01.dat
-Data/training_data/abcd/rendering/02.dat
-Data/training_data/abcd/rendering/03.dat
-Data/training_data/abcd/rendering/04.dat
-Data/training_data/efgh/rendering/01.dat
-Data/training_data/efgh/rendering/02.dat
-Data/training_data/efgh/rendering/03.dat
-Data/training_data/efgh/rendering/04.dat
-Data/training_data/ijkl/rendering/01.dat
-Data/training_data/ijkl/rendering/02.dat
-Data/training_data/ijkl/rendering/03.dat
-Data/training_data/ijkl/rendering/04.dat

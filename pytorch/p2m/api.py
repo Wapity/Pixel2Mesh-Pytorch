@@ -4,7 +4,6 @@ import torch.nn as nn
 from .inits import *
 from .layers import *
 from .utils import *
-import tensorflow as tf
 
 
 class Model(nn.Module):
