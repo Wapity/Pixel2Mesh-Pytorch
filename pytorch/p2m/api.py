@@ -412,7 +412,7 @@ class GCN(Model):
         for key in keys:
             if key.startswith('cnn_layers_'):
                 setattr(self, key, nn.Sequential(*getattr(self, key)))
-        # print(list(self.state_dict().keys()))
+
     def forward_res(self, img_inp):
         x = img_inp
 
@@ -451,10 +451,6 @@ class GCN(Model):
         x = self.cnn_layers_54(x)
         x5 = x
 
-        print('2', x2.shape)
-        print('3', x3.shape)
-        print('4', x4.shape)
-        print('5', x5.shape)
         img_feat = [x2, x3, x4, x5]
         return img_feat
 

@@ -83,18 +83,18 @@ def load(model):
     print('Model loaded from tensorflow')
 
 
-# Load tensorflow model and save in numpy
-# config = tf.ConfigProto()
-# config.gpu_options.allow_growth = True
-# config.allow_soft_placement = True
-# sess = tf.Session(config=config)
-# sess.run(tf.global_variables_initializer())
-# model.load(sess)
-# # all_vars = dict()
-# # for name, tensor in model.vars.items():
-# #     array = sess.run(tensor)
-# #     print(name, array.shape)
-# #     save_name = name.replace('/', '|').replace(':', '=')
-# #     path = os.path.abspath('./weights/') + '/' + save_name
-# #     np.save(path, array)
-# #Runing the demo
+Load tensorflow model and save in numpy
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+config.allow_soft_placement = True
+sess = tf.Session(config=config)
+sess.run(tf.global_variables_initializer())
+model.load(sess)
+all_vars = dict()
+for name, tensor in model.vars.items():
+    array = sess.run(tensor)
+    print(name, array.shape)
+    save_name = name.replace('/', '|').replace(':', '=')
+    path = os.path.abspath('./weights/') + '/' + save_name
+    np.save(path, array)
+Runing the demo

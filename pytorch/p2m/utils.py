@@ -1,5 +1,7 @@
 import numpy as np
 import torch
+from skimage import io, transform
+import pickle
 
 
 class AttributeDict(dict):
@@ -25,7 +27,7 @@ def create_sparse_tensor(info):
     return sparse_tensor
 
 
-def construct_ellipsoid_info(pkl):
+def construct_ellipsoid_info_pkl(pkl):
     """Ellipsoid info in numpy and tensor types"""
     coord = pkl[0]
     pool_idx = pkl[4]
@@ -50,6 +52,22 @@ def construct_ellipsoid_info(pkl):
     return convert_dict(info_dict)
 
 
+def construct_ellipsoid_info(args):
+    pkl = pickle.load(open(args.info_ellipsoid, 'rb'), encoding='bytes')
+    info_dict = construct_ellipsoid_info_pkl(pkl)
+    tensor_dict = {
+        'features': torch.from_numpy(info_dict.features),
+        'edges': [torch.from_numpy(e).long() for e in info_dict.edges],
+        'faces': info_dict.faces,
+        'pool_idx': info_dict.pool_idx,
+        'lape_idx': [torch.from_numpy(l).float() for l in info_dict.lape_idx],
+        'support1': [create_sparse_tensor(info) for info in info_dict.support1],
+        'support2': [create_sparse_tensor(info) for info in info_dict.support2],
+        'support3': [create_sparse_tensor(info) for info in info_dict.support3]
+    }
+    return tensor_dict
+
+
 def get_features(tensor_dict, images):
     if len(images.shape) == 4:
         batch_size = int(images.shape[0])
@@ -57,3 +75,27 @@ def get_features(tensor_dict, images):
             batch_size, -1, -1)
     else:
         return tensor_dict['features']
+
+
+def load_image(img_path):
+    img = io.imread(img_path)
+    if img.shape[2] == 4:
+        img[np.where(img[:, :, 3] == 0)] = 255
+    img = transform.resize(img, (224, 224))
+    img = img[:, :, :3].astype('float32')
+    img_inp = torch.from_numpy(img).unsqueeze(0).permute(0, 3, 1, 2)
+    return img_inp
+
+
+def process_input(img_inp, y_train):
+    img_inp = torch.from_numpy(img_inp).permute(2, 0, 1).float()
+    y_train = torch.from_numpy(y_train)
+    return img_inp, y_train
+
+
+def process_output(output3):
+    vert = output3.detach().numpy()[0]
+    vert = np.hstack((np.full([vert.shape[0], 1], 'v'), vert))
+    face = np.loadtxt('Data/ellipsoid/face3.obj', dtype='|S32')
+    mesh = np.vstack((vert, face))
+    return mesh

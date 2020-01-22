@@ -1,0 +1,17 @@
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png
+Data/training_data/abcd/rendering/01.dat,Data/training_data/abcd/rendering/01.png,Data/training_data/abcd/rendering/01.png

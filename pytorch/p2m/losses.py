@@ -67,7 +67,7 @@ def mesh_loss(pred, labels, tensor_dict, block_id):
     point_loss = (torch.mean(dist1) + 0.55 * torch.mean(dist2)) * 3000
 
     # normal cosine loss
-    normal = torch.index_select(pred, 0, idx2.long())
+    normal = torch.index_select(pred, 0, idx1.long())
     #normal = gt_nm[:, idx2.long()]
     normal = torch.index_select(normal, 0,
                                 tensor_dict['edges'][block_id - 1][:, 0])

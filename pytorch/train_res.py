@@ -1,11 +1,12 @@
 import torch
 import numpy as np
-import pickle
-from skimage import io, transform
 from p2m.api import GCN
 from p2m.utils import *
+from p2m.fetcher import *
 from p2m.models import Trainer
-#import argparse
+import argparse
+from datetime import datetime
+import os
 
 # Set random seed
 seed = 1024
@@ -13,97 +14,120 @@ np.random.seed(seed)
 torch.manual_seed(seed)
 
 # Settings
-#args = argparse.ArgumentParser()
+args = argparse.ArgumentParser()
 
-
-class MyParser(dict):
-
-    def __getattr__(self, attr):
-        return self[attr]
-
-    def __setattr__(self, attr, value):
-        self[attr] = value
-
-    def add_argument(self, attr, default, help, type):
-        self[attr] = default
-
-
-args = MyParser()
-
-args.add_argument('image',
-                  help='Testing image.',
+args.add_argument('--training_data',
+                  help='Training data.',
                   type=str,
-                  default='Data/examples/square.png')
-args.add_argument('learning_rate',
-                  help='Initial learning rate.',
+                  default='data/training_data/train_list.txt')
+args.add_argument('--testing_data',
+                  help='Testing data.',
+                  type=str,
+                  default='data/testing_data/test_list.txt')
+args.add_argument('--learning_rate',
+                  help='Learning rate.',
                   type=float,
-                  default=0.)
-args.add_argument('hidden',
-                  help='Number of units in  hidden layer.',
-                  type=int,
-                  default=256)
-args.add_argument('feat_dim',
-                  help='Number of units in perceptual feature layer.',
-                  type=int,
-                  default=963)
-args.add_argument('coord_dim',
-                  help='Number of units in output layer.',
+                  default=1e-5)
+args.add_argument('--show_every',
+                  help='Frequency of displaying loss',
                   type=int,
                   default=3)
-args.add_argument('weight_decay',
+args.add_argument('--weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
                   default=5e-6)
-args.add_argument('epochs',
+args.add_argument('--epochs',
                   help='Number of epochs to train.',
                   type=int,
                   default=5)
-FLAGS = args
-# Define tensors(dict) and model
-num_blocks = 3
-num_supports = 2
-pkl = pickle.load(open('Data/ellipsoid/info_ellipsoid.dat', 'rb'),
-                  encoding='bytes')
-info_dict = construct_ellipsoid_info(pkl)
-tensor_dict = {
-    'features': torch.from_numpy(info_dict.features),
-    'edges': [torch.from_numpy(e).long() for e in info_dict.edges],
-    'faces': info_dict.faces,
-    'pool_idx': info_dict.pool_idx,
-    'lape_idx': [torch.from_numpy(l).float() for l in info_dict.lape_idx],
-    'support1': [create_sparse_tensor(info) for info in info_dict.support1],
-    'support2': [create_sparse_tensor(info) for info in info_dict.support2],
-    'support3': [create_sparse_tensor(info) for info in info_dict.support3]
-}
+args.add_argument('--cnn_type',
+                  help='Type of Neural Network',
+                  type=str,
+                  default='RES')
+args.add_argument('--checkpoint',
+                  help='Checkpoint to use.',
+                  type=str,
+                  default='data/checkpoints/tf_res_from_vgg.pt')
+args.add_argument('--info_ellipsoid',
+                  help='Initial Ellipsoid info',
+                  type=str,
+                  default='data/ellipsoid/info_ellipsoid.dat')
+args.add_argument('--hidden',
+                  help='Number of units in  hidden layer.',
+                  type=int,
+                  default=256)
+args.add_argument('--feat_dim',
+                  help='Number of units in perceptual feature layer.',
+                  type=int,
+                  default=963)
+args.add_argument('--coord_dim',
+                  help='Number of units in output layer.',
+                  type=int,
+                  default=3)
 
-model = GCN(tensor_dict, args)
+FLAGS = args.parse_args()
+
+mydir = os.path.join(os.getcwd(), 'temp', FLAGS.cnn_type,
+                     datetime.now().strftime('%m-%d_%H-%M-%S'))
+os.makedirs(mydir)
+print('---- Folder created : {}'.format(mydir))
+
+data = DataFetcher(FLAGS.training_data)
+data.setDaemon(True)
+data.start()
+train_number = data.number
+print('---- Loadind training data, {} num samples'.format(train_number))
+
+test_list = []
+with open(FLAGS.testing_data, 'r+', encoding="utf-8") as f:
+    while (True):
+        line = f.readline().strip()
+        if not line:
+            break
+        id = line.split('/')[-1][:-4]
+        test_list.append((id, load_image(line)))
+print('---- Loadind testing data, {} num samples'.format(len(test_list)))
+
+tensor_dict = construct_ellipsoid_info(FLAGS)
+print('---- Build initial ellispoid info')
+
+model = GCN(tensor_dict, FLAGS)
 print('---- Model Created')
 
-trainer = Trainer(tensor_dict, model, args)
+model.load_state_dict(torch.load(FLAGS.checkpoint))
+print('---- Model initialized from VGG')
+
+trainer = Trainer(tensor_dict, model, FLAGS)
 print('---- Trainer Created')
 
-img_inp = torch.randn((224, 224, 3)).permute(2, 0, 1).float()  #to change by real input
-labels = torch.zeros((156, 6)) #to change by real input
-trainer.optimizer_step(img_inp, labels)
-
-train_number = 0  #data.number
-for epoch in range(0 * FLAGS.epochs):
+print('---- Training ...')
+print('\n')
+for epoch in range(FLAGS.epochs):
+    epoch_dir = mydir + '/epoch_{}'.format(epoch + 1)
+    os.makedirs(epoch_dir)
+    os.makedirs(epoch_dir + '/outputs')
+    print('-------- Folder created : {}'.format(epoch_dir))
     all_loss = np.zeros(train_number, dtype='float32')
+    print('-------- Training epoch {} ...'.format(epoch + 1))
     for iters in range(train_number):
-        # Fetch training data
         img_inp, y_train, data_id = data.fetch()
-        img_inp, y_train, data_id = torch.randn(
-            (224, 224, 3)).permute(2, 0, 1).float(), torch.zeros((156, 6)), None
-        # Training step
-        dists, out1, out2, out3 = trainer.optimizer_step(img_inp, labels)
+        img_inp, y_train = process_input(img_inp, y_train)
+        dists, out1, out2, out3 = trainer.optimizer_step(img_inp, y_train)
         all_loss[iters] = dists
         mean_loss = np.mean(all_loss[np.where(all_loss)])
-        if (iters + 1) % 128 == 0:
-            print('Epoch %d, Iteration %d' % (epoch + 1, iters + 1))
-            # print('Mean loss = %f, iter loss = %f, %d' %
-            #       (mean_loss, dists, data.queue.qsize()))
-    # Save model
-    train_loss.write('Epoch %d, loss %f\n' % (epoch + 1, mean_loss))
-
-#data.shutdown()
-print('Training Finished!')
+        if (iters + 1) % FLAGS.show_every == 0:
+            print(
+                '------------ Iteration = {}, mean loss = {:.2f}, iter loss = {:.2f}'
+                .format(iters + 1, mean_loss, dists))
+    print('-------- Training epoch {} done !'.format(epoch + 1))
+    ckp_dir = epoch_dir + '/checkpoint.pt'
+    torch.save(model.state_dict(), ckp_dir)
+    print('-------- Training epoch {} checkoing saved !'.format(epoch + 1))
+    print('-------- Testing epoch {} ...'.format(epoch + 1))
+    for id, img_test in test_list:
+        output3 = model(img_test)[-1]
+        mesh = process_output(output3)
+        pred_path = epoch_dir + '/outputs/' + id + '.obj'
+        np.savetxt(pred_path, mesh, fmt='%s', delimiter=' ')
+    print('-------- Testing epoch {} done !'.format(epoch + 1))
+    print('\n')
