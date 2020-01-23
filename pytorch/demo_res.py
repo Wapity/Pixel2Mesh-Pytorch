@@ -16,7 +16,7 @@ args = argparse.ArgumentParser()
 args.add_argument('--image',
                   help='Testing image.',
                   type=str,
-                  default='data/examples/square.png')
+                  default='data/examples/plane_bis.png')
 args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,

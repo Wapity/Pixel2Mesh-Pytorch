@@ -1,1 +1,1 @@
-data/testing_data/plane.png
+data/testing_data/plane_bis.png
