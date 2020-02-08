@@ -1,1 +1,3 @@
 *.pyc
+pytorch/temp/RES/*
+pytorch/temp/STR/*
