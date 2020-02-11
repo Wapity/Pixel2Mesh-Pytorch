@@ -27,11 +27,11 @@ args.add_argument('--testing_data',
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
-                  default=1e-5)
+                  default=5e-4)
 args.add_argument('--show_every',
                   help='Frequency of displaying loss',
                   type=int,
-                  default=3)
+                  default=1)
 args.add_argument('--weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
@@ -104,11 +104,10 @@ print('---- Trainer Created')
 print('---- Training ...')
 print('\n')
 for epoch in range(FLAGS.epochs):
-    if epoch % 1000 == 0:
-        epoch_dir = mydir + '/epoch_{}'.format(epoch + 1)
-        os.makedirs(epoch_dir)
-        os.makedirs(epoch_dir + '/outputs')
-        print('-------- Folder created : {}'.format(epoch_dir))
+    epoch_dir = mydir + '/epoch_{}'.format(epoch + 1)
+    os.makedirs(epoch_dir)
+    os.makedirs(epoch_dir + '/outputs')
+    print('-------- Folder created : {}'.format(epoch_dir))
     all_loss = np.zeros(train_number, dtype='float32')
     print('-------- Training epoch {} ...'.format(epoch + 1))
     for iters in range(train_number):
@@ -126,11 +125,11 @@ for epoch in range(FLAGS.epochs):
         ckp_dir = epoch_dir + '/checkpoint.pt'
         torch.save(model.state_dict(), ckp_dir)
         print('-------- Training epoch {} checkoing saved !'.format(epoch + 1))
-        print('-------- Testing epoch {} ...'.format(epoch + 1))
-        for id, img_test in test_list:
-            output3 = model(img_test)[-1]
-            mesh = process_output(output3)
-            pred_path = epoch_dir + '/outputs/' + id + '.obj'
-            np.savetxt(pred_path, mesh, fmt='%s', delimiter=' ')
-        print('-------- Testing epoch {} done !'.format(epoch + 1))
-        print('\n')
+    print('-------- Testing epoch {} ...'.format(epoch + 1))
+    for id, img_test in test_list:
+        output3 = model(img_test)[-1]
+        mesh = process_output(output3)
+        pred_path = epoch_dir + '/outputs/' + id + '.obj'
+        np.savetxt(pred_path, mesh, fmt='%s', delimiter=' ')
+    print('-------- Testing epoch {} done !'.format(epoch + 1))
+    print('\n')
