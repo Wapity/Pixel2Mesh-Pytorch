@@ -12,6 +12,7 @@ import os
 seed = 1024
 np.random.seed(seed)
 torch.manual_seed(seed)
+use_cuda = torch.cuda.is_available()
 
 # Settings
 args = argparse.ArgumentParser()
@@ -93,6 +94,8 @@ tensor_dict = construct_ellipsoid_info(FLAGS)
 print('---- Build initial ellispoid info')
 
 model = GCN(tensor_dict, FLAGS)
+if use_cuda:
+    model.cuda()
 print('---- Model Created')
 
 model.load_state_dict(torch.load(FLAGS.checkpoint))
@@ -113,6 +116,8 @@ for epoch in range(FLAGS.epochs):
     for iters in range(train_number):
         img_inp, y_train, data_id = data.fetch()
         img_inp, y_train = process_input(img_inp, y_train)
+        if use_cuda:
+            img_inp, y_train = img_inp.cuda(), y_train.cuda()
         dists, out1, out2, out3 = trainer.optimizer_step(img_inp, y_train)
         all_loss[iters] = dists
         mean_loss = np.mean(all_loss[np.where(all_loss)])
