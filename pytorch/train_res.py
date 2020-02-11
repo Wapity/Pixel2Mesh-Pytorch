@@ -44,10 +44,11 @@ args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
                   default='RES')
-args.add_argument('--checkpoint',
-                  help='Checkpoint to use.',
-                  type=str,
-                  default='temp/RES/01-22_15-35-52/epoch_1001/checkpoint.pt')#changed
+args.add_argument(
+    '--checkpoint',
+    help='Checkpoint to use.',
+    type=str,
+    default='data/checkpoints/tf_res_from_vgg.pt')  #rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
@@ -103,7 +104,7 @@ print('---- Trainer Created')
 print('---- Training ...')
 print('\n')
 for epoch in range(FLAGS.epochs):
-    if epoch%1000 ==0 :
+    if epoch % 1000 == 0:
         epoch_dir = mydir + '/epoch_{}'.format(epoch + 1)
         os.makedirs(epoch_dir)
         os.makedirs(epoch_dir + '/outputs')
@@ -121,7 +122,7 @@ for epoch in range(FLAGS.epochs):
                 '------------ Iteration = {}, mean loss = {:.2f}, iter loss = {:.2f}'
                 .format(iters + 1, mean_loss, dists))
     print('-------- Training epoch {} done !'.format(epoch + 1))
-    if epoch%1000 ==0 :
+    if epoch % 1000 == 0:
         ckp_dir = epoch_dir + '/checkpoint.pt'
         torch.save(model.state_dict(), ckp_dir)
         print('-------- Training epoch {} checkoing saved !'.format(epoch + 1))

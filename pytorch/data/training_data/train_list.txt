@@ -1,1 +1,5 @@
+data/training_data/abcd/rendering/00.dat
 data/training_data/abcd/rendering/01.dat
+data/training_data/abcd/rendering/02.dat
+data/training_data/abcd/rendering/03.dat
+data/training_data/abcd/rendering/04.dat

@@ -38,7 +38,9 @@ def construct_ellipsoid_info_pkl(pkl):
     for i in range(1, 4):
         adj = pkl[i][1]
         edges.append(adj[0])
-
+    for i in range(3):
+        idx = lape_idx[i].shape[0]
+        np.place(lape_idx[i], lape_idx[i] == -1, idx)
     info_dict = {
         'features': coord,
         'edges': edges,
