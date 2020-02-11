@@ -127,7 +127,6 @@ class Trainer:
         for idx, (output, feat) in enumerate(
                 zip([outputs[0], outputs[2], outputs[4]],
                     [inputs, outputs[1], outputs[3]])):
-            print([inputs.shape, outputs[1].shape, outputs[3].shape])
             dist1, dist2, _, _ = chamfer_dist(output, labels[:, :3])
             pt_chamfer_loss += torch.mean(dist1) + torch.mean(dist2)
             pt_edge_loss += edge_loss_pt(output, labels, self.tensor_dict,
@@ -135,7 +134,7 @@ class Trainer:
             pt_lap_loss += lap_const[idx] * laplace_loss(
                 feat, output, self.tensor_dict, idx + 1)
 
-        loss = 100 * chamfer_loss + 0.1 * edge_loss + 0.3 * lap_loss
+        loss = 100 * pt_chamfer_loss + 0.1 * pt_edge_loss + 0.3 * pt_lap_loss
         return loss
 
     def optimizer_step(self, images, labels):
