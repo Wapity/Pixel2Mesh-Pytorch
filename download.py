@@ -1,9 +1,9 @@
 import gdown
 urls = [
-    'https://drive.google.com/uc?id=1Qo1NGS0ByB9L9MbEQ2TdoYtw1pHqJR6u',
-    'https://drive.google.com/uc?id=14OmDZt41W1KXQGk5qHuraQiXe1q7RghT',
-    'https://drive.google.com/uc?id=1ElUDDpUPZULM4MGptuxJqMtUZxcGDLvJ',
-    'https://drive.google.com/uc?id=1nvDDweOxTxFJ2m0p2KGrDaCi5wEeIDC7'
+    'https://drive.google.com/uc?id=1kjLMLd_55Ro7wDrKeFCL3mT0daQ7Aepf',
+    'https://drive.google.com/uc?id=12XYrdIqZp4_jg2AJNZtCQvMC35KrnN4F',
+    'https://drive.google.com/uc?id=10N5DUf8eacNVWK7txZt3ibbxsZ84K0B9',
+    'https://drive.google.com/uc?id=149e9mcO79DEemy3ZBHfyWOGZBybspVwq'
 ]
 
 urls = [url.replace('open', 'uc') for url in urls]
