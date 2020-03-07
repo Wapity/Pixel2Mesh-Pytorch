@@ -14,6 +14,6 @@ for id, url in enumerate(urls):
 import subprocess
 commands = ['mv training_data.001 pytorch/data/training_data/ShapeNetP2M/', 
             'mv training_data.002 pytorch/data/training_data/ShapeNetP2M/',
-            'unzip training_data.001', 'unzip training_data.002]
+            'unzip training_data.001', 'unzip training_data.002']
 for command in commands : 
 	subprocess.check_call(command.split())
