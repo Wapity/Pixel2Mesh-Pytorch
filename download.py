@@ -1,3 +1,4 @@
+#Put in pytorch/data/training_data/ShapeNetP2M/
 import gdown
 urls = [
     'https://drive.google.com/open?id=1dKM_6sR7SCdDQXX8dIQwtpaW3qRiA7pM',
