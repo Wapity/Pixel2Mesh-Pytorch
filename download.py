@@ -1,8 +1,8 @@
 #Put in pytorch/data/training_data/ShapeNetP2M/
 import gdown
 urls = [
-    'https://drive.google.com/open?id=1dKM_6sR7SCdDQXX8dIQwtpaW3qRiA7pM',
-    'https://drive.google.com/open?id=1hXq-kxEsDA0_DzcOFS0yzIvlKxwcgoGZ'
+    'https://drive.google.com/uc?id=1dKM_6sR7SCdDQXX8dIQwtpaW3qRiA7pM',
+    'https://drive.google.com/uc?id=1hXq-kxEsDA0_DzcOFS0yzIvlKxwcgoGZ'
 ]
 
 urls = [url.replace('open', 'uc') for url in urls]
