@@ -454,7 +454,7 @@ class GCN(Model):
         return img_feat
 
     def build_str(self):
-        self.build_vgg()
+        self.build_res()
         self.str_cnn_2 = nn.Sequential(nn.Conv2d(128, 64, 3, padding=1),
                                        nn.ReLU())
         self.str_cnn_3 = nn.Sequential(nn.Conv2d(256, 128, 3, padding=1),
@@ -465,8 +465,8 @@ class GCN(Model):
                                        nn.ReLU())
 
     def forward_str(self, img_inp, img_bis):
-        features_1 = self.forward_vgg(img_inp)
-        features_2 = self.forward_vgg(img_bis)
+        features_1 = self.forward_res(img_inp)
+        features_2 = self.forward_res(img_bis)
 
         x2 = self.str_cnn_2(torch.cat((features_1[0], features_2[0]), 1))
         x3 = self.str_cnn_3(torch.cat((features_1[1], features_2[1]), 1))
