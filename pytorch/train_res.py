@@ -132,12 +132,16 @@ for epoch in range(FLAGS.epochs):
             print("Time for iterations :", datetime.now() - timer)
             timer = datetime.now()
             print("Global time :", timer - starter)
+
     print('-------- Training epoch {} done !'.format(epoch + 1))
     print("Time for epoch :", timer - starter_epoch)
     print("Global time :", timer - starter)
-    ckp_dir = epoch_dir + '/checkpoint.pt'
-    torch.save(model.state_dict(), ckp_dir)
-    print('-------- Training epoch {} checkoing saved !'.format(epoch + 1))
+
+    if (iters + 1) % (6 * FLAGS.show_every) == 0:
+        ckp_dir = epoch_dir + '/checkpoint.pt'
+        torch.save(model.state_dict(), ckp_dir)
+        print('-------- Training epoch {} checkoing saved !'.format(epoch + 1))
+
     print('-------- Testing epoch {} ...'.format(epoch + 1))
     for id, img_test in test_list:
         output3 = model(img_test)[-1]
