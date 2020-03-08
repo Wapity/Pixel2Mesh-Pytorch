@@ -17,7 +17,7 @@ def laplace_coord(pred, tensor_dict, block_id):
     return laplace
 
 
-##### BY BATCH
+# # # # # BY BATCH
 # def laplace_coord(pred, tensor_dict, block_id):
 #     batch_size = pred.shape[0]
 #     vertex = torch.cat(
