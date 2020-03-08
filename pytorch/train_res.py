@@ -32,7 +32,7 @@ args.add_argument('--learning_rate',
 args.add_argument('--show_every',
                   help='Frequency of displaying loss',
                   type=int,
-                  default=1)
+                  default=1000)
 args.add_argument('--weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
@@ -126,10 +126,9 @@ for epoch in range(FLAGS.epochs):
                 '------------ Iteration = {}, mean loss = {:.2f}, iter loss = {:.2f}'
                 .format(iters + 1, mean_loss, dists))
     print('-------- Training epoch {} done !'.format(epoch + 1))
-    if epoch % 1000 == 0:
-        ckp_dir = epoch_dir + '/checkpoint.pt'
-        torch.save(model.state_dict(), ckp_dir)
-        print('-------- Training epoch {} checkoing saved !'.format(epoch + 1))
+    ckp_dir = epoch_dir + '/checkpoint.pt'
+    torch.save(model.state_dict(), ckp_dir)
+    print('-------- Training epoch {} checkoing saved !'.format(epoch + 1))
     print('-------- Testing epoch {} ...'.format(epoch + 1))
     for id, img_test in test_list:
         output3 = model(img_test)[-1]

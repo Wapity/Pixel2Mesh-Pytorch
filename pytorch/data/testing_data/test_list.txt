@@ -1,1 +1,7 @@
+data/testing_data/plane.png
+data/testing_data/car.png
+data/testing_data/chair.png
+data/testing_data/gun.png
+data/testing_data/square.png
 data/testing_data/plane_bis.png
+data/testing_data/table.png
