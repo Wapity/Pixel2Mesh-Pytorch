@@ -1,5 +1,7 @@
-#Put in pytorch/data/training_data/ShapeNetP2M/
+# Put in pytorch/data/training_data/ShapeNetP2M/
 import gdown
+import subprocess
+
 urls = [
     'https://drive.google.com/uc?id=1hyTn97fxTuUi49bk1mKzKesgBkzEaScK',
     'https://drive.google.com/uc?id=1Tc9s7gbfyouMGVoHatHtwr-QSCDe5bau'
@@ -11,10 +13,10 @@ for id, url in enumerate(urls):
     print('Donwloading {} ...'.format(output))
     gdown.download(url, output, quiet=False)
 
-import subprocess
-commands = ['mv training_data.001 pytorch/data/training_data/ShapeNetP2M/', 
+
+commands = ['mkdir pytorch/data/training_data/ShapeNetP2M/',
+            'mv training_data.001 pytorch/data/training_data/ShapeNetP2M/',
             'mv training_data.002 pytorch/data/training_data/ShapeNetP2M/',
             'unzip training_data.001', 'unzip training_data.002']
-for command in commands : 
-	subprocess.check_call(command.split())
-
+for command in commands:
+    subprocess.check_call(command.split())
