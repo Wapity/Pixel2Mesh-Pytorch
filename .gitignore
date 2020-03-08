@@ -1,3 +1,4 @@
 *.pyc
 pytorch/temp/RES/*
 pytorch/temp/STR/*
+pytorch/data/training_data/ShapeNetP2M/*

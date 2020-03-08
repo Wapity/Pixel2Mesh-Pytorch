@@ -20,6 +20,7 @@ import threading
 import queue
 import sys
 from skimage import io, transform
+import os
 
 
 class DataFetcher(threading.Thread):
@@ -40,6 +41,7 @@ class DataFetcher(threading.Thread):
                 if not line:
                     break
                 if os.path.isfile(line):
+                    print(line)
                     self.pkl_list.append(line)
         self.index = 0
         self.number = len(self.pkl_list)
