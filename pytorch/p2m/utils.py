@@ -2,6 +2,7 @@ import numpy as np
 import torch
 from skimage import io, transform
 import pickle
+use_cuda = torch.cuda.is_available()
 
 
 class AttributeDict(dict):
@@ -24,6 +25,8 @@ def create_sparse_tensor(info):
     values = torch.FloatTensor(info[1])
     shape = torch.Size(info[2])
     sparse_tensor = torch.sparse.FloatTensor(indices.t(), values, shape)
+    if use_cuda:
+        sparse_tensor = sparse_tensor.cuda()
     return sparse_tensor
 
 
@@ -57,16 +60,52 @@ def construct_ellipsoid_info_pkl(pkl):
 def construct_ellipsoid_info(args):
     pkl = pickle.load(open(args.info_ellipsoid, 'rb'), encoding='bytes')
     info_dict = construct_ellipsoid_info_pkl(pkl)
-    tensor_dict = {
-        'features': torch.from_numpy(info_dict.features),
-        'edges': [torch.from_numpy(e).long() for e in info_dict.edges],
-        'faces': info_dict.faces,
-        'pool_idx': info_dict.pool_idx,
-        'lape_idx': [torch.from_numpy(l).float() for l in info_dict.lape_idx],
-        'support1': [create_sparse_tensor(info) for info in info_dict.support1],
-        'support2': [create_sparse_tensor(info) for info in info_dict.support2],
-        'support3': [create_sparse_tensor(info) for info in info_dict.support3]
-    }
+    if not use_cuda:
+        tensor_dict = {
+            'features':
+                torch.from_numpy(info_dict.features),
+            'edges': [torch.from_numpy(e).long() for e in info_dict.edges],
+            'faces':
+                info_dict.faces,
+            'pool_idx':
+                info_dict.pool_idx,
+            'lape_idx': [
+                torch.from_numpy(l).float() for l in info_dict.lape_idx
+            ],
+            'support1': [
+                create_sparse_tensor(info) for info in info_dict.support1
+            ],
+            'support2': [
+                create_sparse_tensor(info) for info in info_dict.support2
+            ],
+            'support3': [
+                create_sparse_tensor(info) for info in info_dict.support3
+            ]
+        }
+    else:
+        tensor_dict = {
+            'features':
+                torch.from_numpy(info_dict.features).cuda(),
+            'edges': [
+                torch.from_numpy(e).long().cuda() for e in info_dict.edges
+            ],
+            'faces':
+                info_dict.faces,
+            'pool_idx':
+                info_dict.pool_idx,
+            'lape_idx': [
+                torch.from_numpy(l).float().cuda() for l in info_dict.lape_idx
+            ],
+            'support1': [
+                create_sparse_tensor(info) for info in info_dict.support1
+            ],
+            'support2': [
+                create_sparse_tensor(info) for info in info_dict.support2
+            ],
+            'support3': [
+                create_sparse_tensor(info) for info in info_dict.support3
+            ]
+        }
     return tensor_dict
 
 
