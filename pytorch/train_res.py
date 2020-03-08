@@ -107,7 +107,7 @@ print('---- Trainer Created')
 print('---- Training ...')
 print('\n')
 for epoch in range(FLAGS.epochs):
-    start_epoch = datetime.datetime.now()
+    start_epoch = datetime.now()
     epoch_dir = mydir + '/epoch_{}'.format(epoch + 1)
     os.makedirs(epoch_dir)
     os.makedirs(epoch_dir + '/outputs')
@@ -126,9 +126,9 @@ for epoch in range(FLAGS.epochs):
             print(
                 '------------ Iteration = {}, mean loss = {:.2f}, iter loss = {:.2f}'
                 .format(iters + 1, mean_loss, dists))
-            print("Time for iterations :", datetime.datetime.now() - start_epoch)
+            print("Time for iterations :", datetime.now() - start_epoch)
     print('-------- Training epoch {} done !'.format(epoch + 1))
-    print("Time for epoch :", datetime.datetime.now() - start_epoch)
+    print("Time for epoch :", datetime.now() - start_epoch)
     ckp_dir = epoch_dir + '/checkpoint.pt'
     torch.save(model.state_dict(), ckp_dir)
     print('-------- Training epoch {} checkoing saved !'.format(epoch + 1))
