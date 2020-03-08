@@ -3,10 +3,10 @@
 #nn_distance_module = chamfer3D.dist_chamfer_3D.chamfer_3DDist
 import torch
 from .external.chamfer_python import distChamfer
-from .external.chamfer3D.dist_chamfer_3D import chamfer_3DFunction
+from .external.chamfer3D.dist_chamfer_3D import chamfer_3DDist
 use_cuda = torch.cuda.is_available()
 if use_cuda:
-    dist_module = chamfer_3DFunction()
+    dist_module = chamfer_3DDist()
 else:
     dist_module = distChamfer
 
