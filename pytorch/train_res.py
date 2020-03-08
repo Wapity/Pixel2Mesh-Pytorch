@@ -108,6 +108,7 @@ print('---- Training ...')
 print('\n')
 for epoch in range(FLAGS.epochs):
     start_epoch = datetime.now()
+    timer = start_epoch
     epoch_dir = mydir + '/epoch_{}'.format(epoch + 1)
     os.makedirs(epoch_dir)
     os.makedirs(epoch_dir + '/outputs')
@@ -126,7 +127,8 @@ for epoch in range(FLAGS.epochs):
             print(
                 '------------ Iteration = {}, mean loss = {:.2f}, iter loss = {:.2f}'
                 .format(iters + 1, mean_loss, dists))
-            print("Time for iterations :", datetime.now() - start_epoch)
+            timer = datetime.now()
+            print("Time for iterations :", timer - start_epoch)
     print('-------- Training epoch {} done !'.format(epoch + 1))
     print("Time for epoch :", datetime.now() - start_epoch)
     ckp_dir = epoch_dir + '/checkpoint.pt'
