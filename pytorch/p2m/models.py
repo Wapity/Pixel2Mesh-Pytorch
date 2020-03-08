@@ -142,5 +142,9 @@ class Trainer:
         loss, output1, output2, output3 = self.get_loss(images, labels)
         loss.backward()
         self.optimizer.step()
-        return loss.item(), output1.detach().numpy(), output2.detach().numpy(
-        ), output3.detach().numpy()
+        if not use_cuda:
+            return loss.item(), output1.detach().numpy(), output2.detach(
+            ).numpy(), output3.detach().numpy()
+        else:
+            return loss.item(), output1.detach().cpu().numpy(), output2.detach(
+            ).cpu().numpy(), output3.detach().cpu().numpy()
