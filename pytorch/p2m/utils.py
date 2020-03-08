@@ -125,6 +125,8 @@ def load_image(img_path):
     img = transform.resize(img, (224, 224))
     img = img[:, :, :3].astype('float32')
     img_inp = torch.from_numpy(img).unsqueeze(0).permute(0, 3, 1, 2)
+    if use_cuda:
+        img_inp = img_inp.cuda()
     return img_inp
 
 
