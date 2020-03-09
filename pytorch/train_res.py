@@ -49,7 +49,7 @@ args.add_argument(
     '--checkpoint',
     help='Checkpoint to use.',
     type=str,
-    default='data/checkpoints/tf_res_from_vgg.pt')  # rechanged #changed
+    default='temp/RES/03-09_10-11-06/epoch_1/30000_checkpoint.pt')  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
