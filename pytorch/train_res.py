@@ -134,7 +134,7 @@ for epoch in range(FLAGS.epochs):
             print("Global time :", timer - starter)
 
     print('-------- Training epoch {} done !'.format(epoch + 1))
-    print("Time for epoch :", timer - starter_epoch)
+    print("Time for epoch :", timer - start_epoch)
     print("Global time :", timer - starter)
 
     if (iters + 1) % (6 * FLAGS.show_every) == 0:
