@@ -136,7 +136,6 @@ for epoch in range(FLAGS.epochs):
                 img_inp.append(sample[0])
                 y_train.append(sample[1])
             img_inp = torch.stack(img_inp)
-            y_train = torch.stack(y_train)
             dists, out1, out2, out3 = trainer.optimizer_step(img_inp, y_train)
             all_loss[iters] = dists
             mean_loss = np.mean(all_loss[np.where(all_loss)])
