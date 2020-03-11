@@ -32,7 +32,7 @@ class Trainer:
     def get_loss(self, img_inp, labels):
         if type(img_inp) != list:
             inputs = get_features(self.tensor_dict, img_inp)
-            outputs = self.network(img_inp.cuda())
+            outputs = self.network(img_inp)
         else:
             inputs = get_features(self.tensor_dict, img_inp[0])
             outputs = self.network(img_inp[0].unsqueeze(0),
