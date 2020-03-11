@@ -129,10 +129,9 @@ for epoch in range(FLAGS.epochs):
             all_loss[iters] = dists
             mean_loss = np.mean(all_loss[np.where(all_loss)])
         else:
+            print('NUM ITERATION ==', iters)
             img_inp, y_train = [], []
             for bla in range(FLAGS.batch_size):
-                print('pas celui la')
-                print(bla)
                 sample = data.fetch()
                 sample = process_input(sample[0], sample[1])
                 img_inp.append(sample[0])

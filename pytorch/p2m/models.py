@@ -40,9 +40,7 @@ class Trainer:
             outputs = [output.squeeze(0) for output in outputs]
         if len(img_inp.shape) == 4:
             loss = 0
-            print('blaaaaaa')
             for idx, (input, label) in enumerate(zip(inputs, labels)):
-                print(idx)
                 output = [out[idx] for out in outputs]
                 loss += self._get_loss(input, output, label)
         else:
