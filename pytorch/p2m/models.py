@@ -17,11 +17,26 @@ class Trainer:
         self.tensor_dict = tensor_dict
         self._get_loss = self._get_loss_pt
 
+    # def get_loss(self, img_inp, labels):
+    #     if type(img_inp) != list:
+    #         inputs = get_features(self.tensor_dict, img_inp)
+    #         outputs = self.network(img_inp)
+    #     else:
+    #         inputs = get_features(self.tensor_dict, img_inp[0])
+    #         outputs = self.network(img_inp[0].unsqueeze(0),
+    #                                img_inp[1].unsqueeze(0))
+    #         outputs = [output.squeeze(0) for output in outputs]
+    #     loss = self._get_loss(inputs, outputs, labels)
+    #     return loss, outputs[0], outputs[2], outputs[4]
+
     def get_loss(self, img_inp, labels):
         if type(img_inp) != list:
+            print('bla1')
             inputs = get_features(self.tensor_dict, img_inp)
             outputs = self.network(img_inp)
+            print(inputs.shape, [output.shape for output in outputs])
         else:
+            print('bla2')
             inputs = get_features(self.tensor_dict, img_inp[0])
             outputs = self.network(img_inp[0].unsqueeze(0),
                                    img_inp[1].unsqueeze(0))

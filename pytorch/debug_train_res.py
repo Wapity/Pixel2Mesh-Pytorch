@@ -20,7 +20,7 @@ args = argparse.ArgumentParser()
 args.add_argument('--training_data',
                   help='Training data.',
                   type=str,
-                  default='data/training_data/trainer_list.txt')
+                  default='data/training_data/train_list.txt')
 args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
@@ -32,7 +32,7 @@ args.add_argument('--learning_rate',
 args.add_argument('--show_every',
                   help='Frequency of displaying loss',
                   type=int,
-                  default=200)
+                  default=3)
 args.add_argument('--weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
@@ -45,11 +45,11 @@ args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
                   default='RES')
-args.add_argument('--checkpoint',
-                  help='Checkpoint to use.',
-                  type=str,
-                  default='temp/RES/03-09_10-11-06/epoch_1/30000_checkpoint.pt'
-                 )  # rechanged #changed
+args.add_argument(
+    '--checkpoint',
+    help='Checkpoint to use.',
+    type=str,
+    default='data/checkpoints/tf_res_from_vgg.pt')  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
@@ -124,23 +124,12 @@ for epoch in range(FLAGS.epochs):
         dists, out1, out2, out3 = trainer.optimizer_step(img_inp, y_train)
         all_loss[iters] = dists
         mean_loss = np.mean(all_loss[np.where(all_loss)])
-        if (iters + 1) % FLAGS.show_every == 0:
-            print(
-                '------------ Iteration = {}, mean loss = {:.2f}, iter loss = {:.2f}'
-                .format(iters + 1, mean_loss, dists))
-
-            print("Time for iterations :", datetime.now() - timer)
-            timer = datetime.now()
-            print("Global time :", timer - starter)
         if (iters + 1) % (50 * FLAGS.show_every) == 0:
             ckp_dir = epoch_dir + '/{}_checkpoint.pt'.format(iters + 1)
             torch.save(model.state_dict(), ckp_dir)
             print('-------- Training checkpoint {} saved !'.format(iters + 1))
 
     print('-------- Training epoch {} done !'.format(epoch + 1))
-    print("Time for epoch :", timer - start_epoch)
-    print("Global time :", timer - starter)
-
     print('-------- Testing epoch {} ...'.format(epoch + 1))
     for id, img_test in test_list:
         output3 = model(img_test)[-1]
