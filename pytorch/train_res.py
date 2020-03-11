@@ -109,6 +109,7 @@ print('---- Training ...')
 print('\n')
 starter = datetime.now()
 for epoch in range(FLAGS.epochs):
+
     start_epoch = datetime.now()
     timer = start_epoch
     epoch_dir = mydir + '/epoch_{}'.format(epoch + 1)
@@ -129,7 +130,7 @@ for epoch in range(FLAGS.epochs):
             mean_loss = np.mean(all_loss[np.where(all_loss)])
         else:
             img_inp, y_train = [], []
-            for bla in range(train_number):
+            for bla in range(FLAGS.batch_size):
                 print('pas celui la')
                 print(bla)
                 sample = data.fetch()
