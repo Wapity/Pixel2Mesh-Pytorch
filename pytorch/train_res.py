@@ -25,7 +25,7 @@ args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
                   default='data/testing_data/test_list.txt')
-args.add_argument('--batch_size', help='Batch size.', type=int, default=1)
+args.add_argument('--batch_size', help='Batch size.', type=int, default=64)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
@@ -33,7 +33,7 @@ args.add_argument('--learning_rate',
 args.add_argument('--show_every',
                   help='Frequency of displaying loss',
                   type=int,
-                  default=200)
+                  default=1)
 args.add_argument('--weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
@@ -50,7 +50,7 @@ args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
                   default='temp/RES/03-09_10-11-06/epoch_1/30000_checkpoint.pt'
-                 )  # rechanged #changed
+                  )  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
@@ -109,7 +109,6 @@ print('---- Training ...')
 print('\n')
 starter = datetime.now()
 for epoch in range(FLAGS.epochs):
-
     start_epoch = datetime.now()
     timer = start_epoch
     epoch_dir = mydir + '/epoch_{}'.format(epoch + 1)
@@ -130,7 +129,7 @@ for epoch in range(FLAGS.epochs):
             mean_loss = np.mean(all_loss[np.where(all_loss)])
         else:
             img_inp, y_train = [], []
-            for bla in range(FLAGS.batch_size):
+            for bla in range(train_number):
                 print('pas celui la')
                 print(bla)
                 sample = data.fetch()
