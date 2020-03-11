@@ -50,7 +50,7 @@ args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
                   default='temp/RES/03-09_10-11-06/epoch_1/30000_checkpoint.pt'
-                  )  # rechanged #changed
+                 )  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
@@ -129,7 +129,9 @@ for epoch in range(FLAGS.epochs):
             mean_loss = np.mean(all_loss[np.where(all_loss)])
         else:
             img_inp, y_train = [], []
-            for _ in range(train_number):
+            for bla in range(train_number):
+                print('pas celui la')
+                print(bla)
                 sample = data.fetch()
                 sample = process_input(sample[0], sample[1])
                 img_inp.append(sample[0])
