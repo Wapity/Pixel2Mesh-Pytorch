@@ -118,6 +118,7 @@ for epoch in range(FLAGS.epochs):
     all_loss = np.zeros(int(train_number / FLAGS.batch_size), dtype='float32')
     print('-------- Training epoch {} ...'.format(epoch + 1))
     for iters in range(int(train_number / FLAGS.batch_size)):
+        start_iter = datetime.now()
         if FLAGS.batch_size == 1:
             img_inp, y_train, data_id = data.fetch()
             img_inp, y_train = process_input(img_inp, y_train)
@@ -138,6 +139,11 @@ for epoch in range(FLAGS.epochs):
             dists, out1, out2, out3 = trainer.optimizer_step(img_inp, y_train)
             all_loss[iters] = dists
             mean_loss = np.mean(all_loss[np.where(all_loss)])
+        end_iter = datetime.now()
+        if iters == 0:
+            total_iter = end_iter - start_iter
+            print(" REAL TIME PER IMAGE == ",
+                  total_iter.seconds / FLAGS.batch_size)
         if (iters + 1) % FLAGS.show_every == 0:
             print(
                 '------------ Iteration = {}, mean loss = {:.2f}, iter loss = {:.2f}'
