@@ -116,19 +116,30 @@ for epoch in range(FLAGS.epochs):
     print('-------- Folder created : {}'.format(epoch_dir))
     all_loss = np.zeros(train_number, dtype='float32')
     print('-------- Training epoch {} ...'.format(epoch + 1))
-    for iters in range(train_number):
-        img_inp, y_train, data_id = data.fetch()
-        img_inp, y_train = process_input(img_inp, y_train)
-        if use_cuda:
-            img_inp, y_train = img_inp.cuda(), y_train.cuda()
+    if False:
+        for iters in range(train_number):
+            img_inp, y_train, data_id = data.fetch()
+            img_inp, y_train = process_input(img_inp, y_train)
+            if use_cuda:
+                img_inp, y_train = img_inp.cuda(), y_train.cuda()
+            dists, out1, out2, out3 = trainer.optimizer_step(img_inp, y_train)
+            all_loss[iters] = dists
+            mean_loss = np.mean(all_loss[np.where(all_loss)])
+            if (iters + 1) % (50 * FLAGS.show_every) == 0:
+                ckp_dir = epoch_dir + '/{}_checkpoint.pt'.format(iters + 1)
+                torch.save(model.state_dict(), ckp_dir)
+                print('-------- Training checkpoint {} saved !'.format(iters +
+                                                                       1))
+    else:
+        img_inp, y_train = [], []
+        for _ in range(train_number):
+            sample = data.fetch()
+            sample = process_input(sample[0], sample[1])
+            img_inp.append(sample[0])
+            y_train.append(sample[1])
+        img_inp = torch.stack(img_inp)
+        y_train = torch.stack(y_train)
         dists, out1, out2, out3 = trainer.optimizer_step(img_inp, y_train)
-        all_loss[iters] = dists
-        mean_loss = np.mean(all_loss[np.where(all_loss)])
-        if (iters + 1) % (50 * FLAGS.show_every) == 0:
-            ckp_dir = epoch_dir + '/{}_checkpoint.pt'.format(iters + 1)
-            torch.save(model.state_dict(), ckp_dir)
-            print('-------- Training checkpoint {} saved !'.format(iters + 1))
-
     print('-------- Training epoch {} done !'.format(epoch + 1))
     print('-------- Testing epoch {} ...'.format(epoch + 1))
     for id, img_test in test_list:

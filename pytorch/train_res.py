@@ -25,6 +25,7 @@ args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
                   default='data/testing_data/test_list.txt')
+args.add_argument('--batch_size', help='Batch size.', type=int, default=64)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
@@ -114,16 +115,29 @@ for epoch in range(FLAGS.epochs):
     os.makedirs(epoch_dir)
     os.makedirs(epoch_dir + '/outputs')
     print('-------- Folder created : {}'.format(epoch_dir))
-    all_loss = np.zeros(train_number, dtype='float32')
+    all_loss = np.zeros(int(train_number / FLAGS.batch_size), dtype='float32')
     print('-------- Training epoch {} ...'.format(epoch + 1))
-    for iters in range(train_number):
-        img_inp, y_train, data_id = data.fetch()
-        img_inp, y_train = process_input(img_inp, y_train)
-        if use_cuda:
-            img_inp, y_train = img_inp.cuda(), y_train.cuda()
-        dists, out1, out2, out3 = trainer.optimizer_step(img_inp, y_train)
-        all_loss[iters] = dists
-        mean_loss = np.mean(all_loss[np.where(all_loss)])
+    for iters in range(int(train_number / FLAGS.batch_size)):
+        if FLAGS.batch_size == 1:
+            img_inp, y_train, data_id = data.fetch()
+            img_inp, y_train = process_input(img_inp, y_train)
+            if use_cuda:
+                img_inp, y_train = img_inp.cuda(), y_train.cuda()
+            dists, out1, out2, out3 = trainer.optimizer_step(img_inp, y_train)
+            all_loss[iters] = dists
+            mean_loss = np.mean(all_loss[np.where(all_loss)])
+        else:
+            img_inp, y_train = [], []
+            for _ in range(train_number):
+                sample = data.fetch()
+                sample = process_input(sample[0], sample[1])
+                img_inp.append(sample[0])
+                y_train.append(sample[1])
+            img_inp = torch.stack(img_inp)
+            y_train = torch.stack(y_train)
+            dists, out1, out2, out3 = trainer.optimizer_step(img_inp, y_train)
+            all_loss[iters] = dists
+            mean_loss = np.mean(all_loss[np.where(all_loss)])
         if (iters + 1) % FLAGS.show_every == 0:
             print(
                 '------------ Iteration = {}, mean loss = {:.2f}, iter loss = {:.2f}'
