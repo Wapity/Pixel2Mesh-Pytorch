@@ -134,9 +134,11 @@ for epoch in range(FLAGS.epochs):
                 sample = data.fetch()
                 sample = process_input(sample[0], sample[1])
                 if use_cuda:
-                    sample[1] = sample[1].cuda()
+                    y_train.append(sample[1].cuda())
+                else:
+                    y_train.append(sample[1])
                 img_inp.append(sample[0])
-                y_train.append(sample[1])
+
             img_inp = torch.stack(img_inp)
             if use_cuda:
                 img_inp = img_inp.cuda()
