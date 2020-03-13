@@ -21,12 +21,12 @@ args = argparse.ArgumentParser()
 args.add_argument('--training_data',
                   help='Training data.',
                   type=str,
-                  default='data/training_data/trainer_list.txt')
+                  default='data/training_data/train_list.txt')
 args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
                   default='data/testing_data/test_list.txt')
-args.add_argument('--batch_size', help='Batch size.', type=int, default=32)
+args.add_argument('--batch_size', help='Batch size.', type=int, default=5)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
@@ -38,7 +38,7 @@ args.add_argument('--show_every',
 args.add_argument('--weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
-                  default=5e-6)
+                  default=5e-8)
 args.add_argument('--epochs',
                   help='Number of epochs to train.',
                   type=int,
@@ -50,7 +50,7 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='temp/RES/03-09_10-11-06/epoch_1/30000_checkpoint.pt'
+                  default='temp/RES/03-09_16-24-45/epoch_5/60000_checkpoint.pt'
                   )  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
@@ -130,7 +130,7 @@ for epoch in range(FLAGS.epochs):
             all_loss[iters] = dists
             mean_loss = np.mean(all_loss[np.where(all_loss)])
         else:
-            print('NUM ITERATION ==', iters)
+            #print('NUM ITERATION ==', iters)
             img_inp, y_train = [], []
             for bla in range(FLAGS.batch_size):
                 sample = data.fetch()
