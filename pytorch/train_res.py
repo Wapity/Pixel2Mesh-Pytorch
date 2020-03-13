@@ -133,9 +133,13 @@ for epoch in range(FLAGS.epochs):
             for bla in range(FLAGS.batch_size):
                 sample = data.fetch()
                 sample = process_input(sample[0], sample[1])
+                if use_cuda:
+                    sample[1] = sample[1].cuda()
                 img_inp.append(sample[0])
                 y_train.append(sample[1])
             img_inp = torch.stack(img_inp)
+            if use_cuda:
+                img_inp = img_inp.cuda()
             dists, out1, out2, out3 = trainer.optimizer_step(img_inp, y_train)
             all_loss[iters] = dists
             mean_loss = np.mean(all_loss[np.where(all_loss)])
