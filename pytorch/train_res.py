@@ -21,12 +21,12 @@ args = argparse.ArgumentParser()
 args.add_argument('--training_data',
                   help='Training data.',
                   type=str,
-                  default='data/training_data/train_list.txt')
+                  default='data/training_data/trainer_list.txt')
 args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
                   default='data/testing_data/test_list.txt')
-args.add_argument('--batch_size', help='Batch size.', type=int, default=5)
+args.add_argument('--batch_size', help='Batch size.', type=int, default=16)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
