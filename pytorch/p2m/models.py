@@ -13,7 +13,8 @@ class Trainer:
         self.network = network
 
         self.optimizer = optim.Adam(network.parameters(),
-                                    lr=self.args.learning_rate)
+                                    lr=self.args.learning_rate,
+                                    weight_decay=self.args.weight_decay)
         self.tensor_dict = tensor_dict
         self._get_loss = self._get_loss_pt
 
@@ -43,6 +44,7 @@ class Trainer:
             for idx, (input, label) in enumerate(zip(inputs, labels)):
                 output = [out[idx] for out in outputs]
                 loss += self._get_loss(input, output, label)
+            loss /= len(inputs)
         else:
             loss = self._get_loss(inputs, outputs, labels)
         return loss, outputs[0], outputs[2], outputs[4]
