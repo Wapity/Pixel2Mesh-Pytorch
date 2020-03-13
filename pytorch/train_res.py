@@ -26,7 +26,7 @@ args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
                   default='data/testing_data/test_list.txt')
-args.add_argument('--batch_size', help='Batch size.', type=int, default=16)
+args.add_argument('--batch_size', help='Batch size.', type=int, default=32)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
@@ -51,7 +51,7 @@ args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
                   default='temp/RES/03-09_10-11-06/epoch_1/30000_checkpoint.pt'
-                 )  # rechanged #changed
+                  )  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
