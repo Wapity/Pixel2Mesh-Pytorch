@@ -39,10 +39,6 @@ args.add_argument('--learning_rate_every',
                   help='Learning rate.',
                   type=int,
                   default=100)
-args.add_argument('--coord_dim',
-                  help='Number of units in output layer.',
-                  type=int,
-                  default=3)
 args.add_argument('--show_every',
                   help='Frequency of displaying loss',
                   type=int,
