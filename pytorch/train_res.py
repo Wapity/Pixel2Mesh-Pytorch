@@ -129,6 +129,7 @@ for epoch in range(FLAGS.epochs):
     all_loss = np.zeros(int(train_number / FLAGS.batch_size), dtype='float32')
     print('-------- Training epoch {} ...'.format(epoch + 1))
     for iters in range(int(train_number / FLAGS.batch_size)):
+        print(iters)
         torch.cuda.empty_cache()
         start_iter = datetime.now()
         if FLAGS.batch_size == 1:
