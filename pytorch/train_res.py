@@ -31,6 +31,18 @@ args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
                   default=5e-4)
+args.add_argument('--learning_rate_decay',
+                  help='Learning rate.',
+                  type=float,
+                  default=1.)
+args.add_argument('--learning_rate_every',
+                  help='Learning rate.',
+                  type=int,
+                  default=100)
+args.add_argument('--coord_dim',
+                  help='Number of units in output layer.',
+                  type=int,
+                  default=3)
 args.add_argument('--show_every',
                   help='Frequency of displaying loss',
                   type=int,
@@ -51,7 +63,7 @@ args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
                   default='temp/RES/03-09_16-24-45/epoch_5/60000_checkpoint.pt'
-                  )  # rechanged #changed
+                 )  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
@@ -110,6 +122,8 @@ print('---- Training ...')
 print('\n')
 starter = datetime.now()
 for epoch in range(FLAGS.epochs):
+    if (epoch + 1) % FLAGS.learning_rate_every == 0:
+        trainer.decay_lr()
     start_epoch = datetime.now()
     timer = start_epoch
     epoch_dir = mydir + '/epoch_{}'.format(epoch + 1)

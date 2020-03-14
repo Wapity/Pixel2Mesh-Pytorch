@@ -30,6 +30,10 @@ class Trainer:
     #     loss = self._get_loss(inputs, outputs, labels)
     #     return loss, outputs[0], outputs[2], outputs[4]
 
+    def decay_lr(self):
+        for param_group in self.optimizer.param_groups:
+            param_group['lr'] *= self.args.learning_rate_decay
+
     def get_loss(self, img_inp, labels):
         if type(img_inp) != list:
             inputs = get_features(self.tensor_dict, img_inp)
