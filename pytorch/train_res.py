@@ -26,7 +26,7 @@ args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
                   default='data/testing_data/test_list.txt')
-args.add_argument('--batch_size', help='Batch size.', type=int, default=8)
+args.add_argument('--batch_size', help='Batch size.', type=int, default=16)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
