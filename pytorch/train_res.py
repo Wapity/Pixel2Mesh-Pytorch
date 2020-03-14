@@ -30,11 +30,11 @@ args.add_argument('--batch_size', help='Batch size.', type=int, default=16)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
-                  default=5e-4)
+                  default=5e-5)
 args.add_argument('--learning_rate_decay',
                   help='Learning rate.',
                   type=float,
-                  default=1.)
+                  default=0.98)
 args.add_argument('--learning_rate_every',
                   help='Learning rate.',
                   type=int,
@@ -46,11 +46,11 @@ args.add_argument('--show_every',
 args.add_argument('--weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
-                  default=5e-8)
+                  default=5e-6)
 args.add_argument('--epochs',
                   help='Number of epochs to train.',
                   type=int,
-                  default=5)
+                  default=10)
 args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
@@ -58,7 +58,7 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='temp/RES/03-09_16-24-45/epoch_5/60000_checkpoint.pt'
+                  default='data/checkpoints/tf_res_from_vgg.pt'
                   )  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
