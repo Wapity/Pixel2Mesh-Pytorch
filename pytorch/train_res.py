@@ -38,7 +38,7 @@ args.add_argument('--learning_rate_decay',
 args.add_argument('--learning_rate_every',
                   help='Learning rate.',
                   type=int,
-                  default=5)
+                  default=10)
 args.add_argument('--show_every',
                   help='Frequency of displaying loss',
                   type=int,
