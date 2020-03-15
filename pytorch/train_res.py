@@ -58,7 +58,7 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='data/checkpoints/tf_res_from_vgg.pt'
+                  default='temp/RES/03-14_22-33-17/epoch_5/3500.pt'
                   )  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
