@@ -30,7 +30,7 @@ args.add_argument('--batch_size', help='Batch size.', type=int, default=16)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
-                  default=5e-5)
+                  default=4.7e-5)
 args.add_argument('--learning_rate_decay',
                   help='Learning rate.',
                   type=float,
