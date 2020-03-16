@@ -38,7 +38,7 @@ args.add_argument('--learning_rate_decay',
 args.add_argument('--learning_rate_every',
                   help='Learning rate.',
                   type=int,
-                  default=10)
+                  default=5)
 args.add_argument('--show_every',
                   help='Frequency of displaying loss',
                   type=int,
@@ -50,7 +50,7 @@ args.add_argument('--weight_decay',
 args.add_argument('--epochs',
                   help='Number of epochs to train.',
                   type=int,
-                  default=10)
+                  default=6)
 args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
@@ -58,7 +58,7 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='temp/RES/03-14_22-33-17/epoch_5/3500_checkpoint.pt'
+                  default='/Pixel2Mesh-Pytorch-TUM/pytorch/temp/RES/03-15_21-30-02/epoch_7/last_checkpoint.pt'
                   )  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
