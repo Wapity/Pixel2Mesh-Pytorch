@@ -30,15 +30,15 @@ args.add_argument('--batch_size', help='Batch size.', type=int, default=16)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
-                  default=4.7e-5)
+                  default=4.5e-5)
 args.add_argument('--learning_rate_decay',
                   help='Learning rate.',
                   type=float,
-                  default=0.98)
+                  default=0.985)
 args.add_argument('--learning_rate_every',
                   help='Learning rate.',
                   type=int,
-                  default=5)
+                  default=2)
 args.add_argument('--show_every',
                   help='Frequency of displaying loss',
                   type=int,
