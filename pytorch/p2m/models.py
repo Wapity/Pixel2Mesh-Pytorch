@@ -36,14 +36,14 @@ class Trainer:
 
     def get_loss(self, img_inp, labels):
         if type(img_inp) != list:
+            batch = len(img_inp.shape) == 4
             inputs = get_features(self.tensor_dict, img_inp)
             outputs = self.network(img_inp)
         else:
+            batch = len(img_inp[0].shape) == 4
             inputs = get_features(self.tensor_dict, img_inp[0])
-            outputs = self.network(img_inp[0].unsqueeze(0),
-                                   img_inp[1].unsqueeze(0))
-            outputs = [output.squeeze(0) for output in outputs]
-        if len(img_inp.shape) == 4:
+            outputs = self.network(img_inp[0], img_inp[1])
+        if batch:
             loss = 0
             for idx, (input, label) in enumerate(zip(inputs, labels)):
                 output = [out[idx] for out in outputs]

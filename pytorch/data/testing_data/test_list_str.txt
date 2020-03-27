@@ -1,0 +1,3 @@
+data/testing_data/plane.png,data/testing_data/plane.png
+data/testing_data/chair.png,data/testing_data/chair.png
+data/testing_data/car.png,data/testing_data/car.png
