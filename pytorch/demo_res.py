@@ -4,6 +4,7 @@ from p2m.api import GCN
 from p2m.utils import *
 import argparse
 from datetime import datetime
+use_cuda = torch.cuda.is_available()
 
 # Set random seed
 seed = 1024
@@ -48,6 +49,8 @@ tensor_dict = construct_ellipsoid_info(FLAGS)
 print('---- Build initial ellispoid info')
 
 model = GCN(tensor_dict, FLAGS)
+if use_cuda:
+    model = model.cuda()
 print('---- Model Created')
 
 model.load_state_dict(
