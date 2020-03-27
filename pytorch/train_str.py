@@ -109,7 +109,7 @@ print('---- Model Created')
 
 if use_cuda:
     model.load_state_dict(torch.load(FLAGS.checkpoint), strict=False)
-    model.cuda()
+    model = model.cuda()
 else:
     model.load_state_dict(torch.load(FLAGS.checkpoint,
                                      map_location=torch.device('cpu')),
