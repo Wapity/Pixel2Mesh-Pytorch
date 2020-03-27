@@ -26,7 +26,7 @@ args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
                   default='data/testing_data/test_list_str.txt')
-args.add_argument('--batch_size', help='Batch size.', type=int, default=2)
+args.add_argument('--batch_size', help='Batch size.', type=int, default=1)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
@@ -108,7 +108,7 @@ model = GCN(tensor_dict, FLAGS)
 print('---- Model Created')
 
 if use_cuda:
-    model.load_state_dict(torch.load(FLAGS.checkpoint), strit=False)
+    model.load_state_dict(torch.load(FLAGS.checkpoint), strict=False)
     model.cuda()
 else:
     model.load_state_dict(torch.load(FLAGS.checkpoint,
@@ -136,7 +136,7 @@ for epoch in range(FLAGS.epochs):
     for iters in range(int(train_number / FLAGS.batch_size)):
         torch.cuda.empty_cache()
         start_iter = datetime.now()
-        if FLAGS.batch_size == 1:
+        if FLAGS.batch_size == -11:
             img_inp_1, img_inp_2, y_train, data_id = data.fetch()
             img_inp_1, _ = process_input(img_inp_1, y_train)
             img_inp_2, y_train = process_input(img_inp_2, y_train)
