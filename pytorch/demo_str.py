@@ -28,7 +28,7 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='data/checkpoints/tf_str_from_vgg.pt')
+                  default='data/checkpoints/last_checkpoint.pt')
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
@@ -54,7 +54,8 @@ print('---- Build initial ellispoid info')
 model = GCN(tensor_dict, FLAGS)
 print('---- Model Created')
 
-model.load_state_dict(torch.load(FLAGS.checkpoint))
+model.load_state_dict(
+    torch.load(FLAGS.checkpoint, map_location=torch.device('cpu')))
 print('---- Model loaded from checkpoint')
 
 img_inp_1 = load_image(FLAGS.image)
