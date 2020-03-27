@@ -50,7 +50,8 @@ print('---- Build initial ellispoid info')
 model = GCN(tensor_dict, FLAGS)
 print('---- Model Created')
 
-model.load_state_dict(torch.load(FLAGS.checkpoint))
+model.load_state_dict(
+    torch.load(FLAGS.checkpoint, map_location=torch.device('cpu')))
 print('---- Model loaded from checkpoint')
 
 img_inp = load_image(FLAGS.image)
