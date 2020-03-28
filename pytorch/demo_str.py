@@ -4,6 +4,7 @@ from p2m.api import GCN
 from p2m.utils import *
 import argparse
 from datetime import datetime
+use_cuda = torch.cuda.is_available()
 
 # Set random seed
 seed = 1024
