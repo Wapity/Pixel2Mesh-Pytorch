@@ -1,7 +1,7 @@
 data/testing_data/plane_00.png,data/testing_data/plane_03.png
-data/training_data/ShapeNetP2M/04379243/b70483396e091a75808b6f0b77e3bec3/rendering/00.png,data/training_data/ShapeNetP2M/04379243/b70483396e091a75808b6f0b77e3bec3/rendering/03.png
-data/training_data/ShapeNetP2M/04379243/b77556086eea0ab181187d9890753294/rendering/00.png,data/training_data/ShapeNetP2M/04379243/b77556086eea0ab181187d9890753294/rendering/03.png
-data/training_data/ShapeNetP2M/04379243/b0910467658fa43f7fde87eb01f5851/rendering/00.png,data/training_data/ShapeNetP2M/04379243/b0910467658fa43f7fde87eb01f5851/rendering/03.png
-data/training_data/ShapeNetP2M/04379243/b2564957632c596c2ebeb1e6a8111f53/rendering/00.png,data/training_data/ShapeNetP2M/04379243/b2564957632c596c2ebeb1e6a8111f53/rendering/03.png
-data/training_data/ShapeNetP2M/04379243/b390566645360e5d69fb38085fbc320c/rendering/00.png,data/training_data/ShapeNetP2M/04379243/b390566645360e5d69fb38085fbc320c/rendering/03.png
-data/training_data/ShapeNetP2M/04379243/b598794290077d8cfbbc7c456d85ce59/rendering/00.png,data/training_data/ShapeNetP2M/04379243/b598794290077d8cfbbc7c456d85ce59/rendering/03.png
+data/testing_data/car_00.png,data/testing_data/car_03.png
+data/testing_data/chair_00.png,data/testing_data/chair_03.png
+data/testing_data/couch_00.png,data/testing_data/couch_03.png
+data/testing_data/desk_00.png,data/testing_data/desk_03.png
+data/testing_data/gun_00.png,data/testing_data/gun_03.png
+data/testing_data/sound_bass_00.png,data/testing_data/sound_bass_03.png
