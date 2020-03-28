@@ -42,7 +42,7 @@ args.add_argument('--learning_rate_every',
 args.add_argument('--show_every',
                   help='Frequency of displaying loss',
                   type=int,
-                  default=10)
+                  default=100)
 args.add_argument('--weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
