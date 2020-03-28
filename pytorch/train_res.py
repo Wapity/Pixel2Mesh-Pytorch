@@ -34,7 +34,7 @@ args.add_argument('--learning_rate',
 args.add_argument('--learning_rate_decay',
                   help='Learning rate.',
                   type=float,
-                  default=0.985)
+                  default=0.97)
 args.add_argument('--learning_rate_every',
                   help='Learning rate.',
                   type=int,
