@@ -21,7 +21,7 @@ args = argparse.ArgumentParser()
 args.add_argument('--training_data',
                   help='Training data.',
                   type=str,
-                  default='data/training_data/train_list_str.txt')
+                  default='data/training_data/train_list_str_main.txt')
 args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
