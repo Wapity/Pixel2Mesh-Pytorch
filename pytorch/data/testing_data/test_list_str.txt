@@ -1,4 +1,7 @@
 data/testing_data/plane_00.png,data/testing_data/plane_03.png
-data/testing_data/plane_00.png,data/testing_data/plane_03.png
-data/testing_data/plane_00.png,data/testing_data/plane_03.png
-data/testing_data/plane_00.png,data/testing_data/plane_03.png
+data/testing_data/car_00.png,data/testing_data/car_03.png
+data/testing_data/chair_00.png,data/testing_data/chair_03.png
+data/testing_data/couch_00.png,data/testing_data/couch_03.png
+data/testing_data/desk_00.png,data/testing_data/desk_03.png
+data/testing_data/gun_00.png,data/testing_data/gun_03.png
+data/testing_data/sound_bass_00.png,data/testing_data/sound_bass_03.png

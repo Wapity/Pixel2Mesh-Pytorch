@@ -21,12 +21,12 @@ args = argparse.ArgumentParser()
 args.add_argument('--training_data',
                   help='Training data.',
                   type=str,
-                  default='data/training_data/train_list_str.txt')
+                  default='data/training_data/train_list_str_main.txt')
 args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
                   default='data/testing_data/test_list_str.txt')
-args.add_argument('--batch_size', help='Batch size.', type=int, default=1)
+args.add_argument('--batch_size', help='Batch size.', type=int, default=16)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
@@ -34,7 +34,7 @@ args.add_argument('--learning_rate',
 args.add_argument('--learning_rate_decay',
                   help='Learning rate.',
                   type=float,
-                  default=0.985)
+                  default=0.99)
 args.add_argument('--learning_rate_every',
                   help='Learning rate.',
                   type=int,
@@ -42,7 +42,7 @@ args.add_argument('--learning_rate_every',
 args.add_argument('--show_every',
                   help='Frequency of displaying loss',
                   type=int,
-                  default=10)
+                  default=100)
 args.add_argument('--weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
@@ -59,7 +59,7 @@ args.add_argument(
     '--checkpoint',
     help='Checkpoint to use.',
     type=str,
-    default='data/checkpoints/last_checkpoint.pt')  # rechanged #changed
+    default='temp/STR/03-28_07-26-53/epoch_11/last_checkpoint.pt')  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
