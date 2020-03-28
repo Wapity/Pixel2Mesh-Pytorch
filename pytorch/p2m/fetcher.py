@@ -40,14 +40,12 @@ class DataFetcher(threading.Thread):
                 line = f.readline().strip()
                 if not line:
                     break
-
                 if (not stereo) and os.path.isfile(line):
                     self.pkl_list.append(line)
                 if stereo and all([os.path.isfile(l) for l in line.split(',')]):
                     self.pkl_list.append(line)
         self.index = 0
         self.number = len(self.pkl_list)
-        print(100 * '*', self.number)
         np.random.shuffle(self.pkl_list)
 
     def work_non_stereo(self, idx):
