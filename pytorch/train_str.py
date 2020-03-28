@@ -26,7 +26,7 @@ args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
                   default='data/testing_data/test_list_str.txt')
-args.add_argument('--batch_size', help='Batch size.', type=int, default=16)
+args.add_argument('--batch_size', help='Batch size.', type=int, default=8)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
@@ -50,7 +50,7 @@ args.add_argument('--weight_decay',
 args.add_argument('--epochs',
                   help='Number of epochs to train.',
                   type=int,
-                  default=11)
+                  default=20)
 args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
