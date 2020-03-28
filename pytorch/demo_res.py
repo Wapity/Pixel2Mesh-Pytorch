@@ -49,8 +49,6 @@ tensor_dict = construct_ellipsoid_info(FLAGS)
 print('---- Build initial ellispoid info')
 
 model = GCN(tensor_dict, FLAGS)
-if use_cuda:
-    model = model.cuda()
 print('---- Model Created')
 
 model.load_state_dict(
