@@ -34,7 +34,7 @@ args.add_argument('--learning_rate',
 args.add_argument('--learning_rate_decay',
                   help='Learning rate.',
                   type=float,
-                  default=0.99)
+                  default=0.98)
 args.add_argument('--learning_rate_every',
                   help='Learning rate.',
                   type=int,
@@ -46,7 +46,7 @@ args.add_argument('--show_every',
 args.add_argument('--weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
-                  default=5e-6)
+                  default=1e-6)
 args.add_argument('--epochs',
                   help='Number of epochs to train.',
                   type=int,
@@ -59,7 +59,7 @@ args.add_argument(
     '--checkpoint',
     help='Checkpoint to use.',
     type=str,
-    default='temp/STR/03-28_07-26-53/epoch_11/last_checkpoint.pt')  # rechanged #changed
+    default='temp/STR/03-28_19-22-59/epoch_20/last_checkpoint.pt')  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
