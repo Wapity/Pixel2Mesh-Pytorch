@@ -3,13 +3,13 @@ import gdown
 import subprocess
 
 urls = [
-    'https://drive.google.com/uc?id=1hyTn97fxTuUi49bk1mKzKesgBkzEaScK',
-    'https://drive.google.com/uc?id=1Tc9s7gbfyouMGVoHatHtwr-QSCDe5bau'
+    'https://drive.google.com/uc?id=1R69tifYSd3SRe7357ppljmU7l_WX7Wxt',
+    'https://drive.google.com/uc?id=1BzxmQlDDiXOClxkF6I2rskK8-dl2nJdV'
 ]
 
 urls = [url.replace('open', 'uc') for url in urls]
 for id, url in enumerate(urls):
-    output = 'training_data.00{}'.format(id + 1)
+    output = 'training_data.00{}'.format(id + 3)
     print('Donwloading {} ...'.format(output))
     gdown.download(url, output, quiet=False)
 
