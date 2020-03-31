@@ -59,7 +59,7 @@ args.add_argument(
     '--checkpoint',
     help='Checkpoint to use.',
     type=str,
-    default='temp/STR/03-30_14-35-41/epoch_1/last_checkpoint.pt')  # rechanged #changed
+    default='temp/STR/03-30_16-17-34/epoch_20/last_checkpoint.pt')  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
