@@ -1,0 +1,4 @@
+data/training_data/abcd/rendering/00.dat,data/training_data/abcd/rendering/00.png,data/training_data/abcd/rendering/03.png
+data/training_data/abcd/rendering/00.dat,data/training_data/abcd/rendering/00.png,data/training_data/abcd/rendering/03.png
+data/training_data/abcd/rendering/00.dat,data/training_data/abcd/rendering/00.png,data/training_data/abcd/rendering/03.png
+data/training_data/abcd/rendering/00.dat,data/training_data/abcd/rendering/00.png,data/training_data/abcd/rendering/03.png
