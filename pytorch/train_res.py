@@ -104,6 +104,8 @@ tensor_dict = construct_ellipsoid_info(FLAGS)
 print('---- Build initial ellispoid info')
 
 model = GCN(tensor_dict, FLAGS)
+print('---- Model Created')
+
 if use_cuda:
     model.load_state_dict(torch.load(FLAGS.checkpoint), strict=False)
     model = model.cuda()
@@ -111,9 +113,6 @@ else:
     model.load_state_dict(torch.load(FLAGS.checkpoint,
                                      map_location=torch.device('cpu')),
                           strict=False)
-print('---- Model Created')
-
-model.load_state_dict(torch.load(FLAGS.checkpoint))
 print('---- Model initialized from VGG')
 
 trainer = Trainer(tensor_dict, model, FLAGS)
