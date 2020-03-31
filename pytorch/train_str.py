@@ -55,11 +55,11 @@ args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
                   default='STR')
-args.add_argument(
-    '--checkpoint',
-    help='Checkpoint to use.',
-    type=str,
-    default='temp/STR/03-28_07-26-53/epoch_11/last_checkpoint.pt')  # rechanged #changed
+args.add_argument('--checkpoint',
+                  help='Checkpoint to use.',
+                  type=str,
+                  default='temp/STR/03-28_07-26-53/epoch_11/last_checkpoint.pt'
+                 )  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
