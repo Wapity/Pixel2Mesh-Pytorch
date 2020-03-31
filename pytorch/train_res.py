@@ -59,7 +59,7 @@ args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
                   default='temp/RES/03-19_13-19-57/epoch_8/last_checkpoint.pt'
-                  )  # rechanged #changed
+                 )  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
@@ -107,6 +107,10 @@ model = GCN(tensor_dict, FLAGS)
 if use_cuda:
     model.load_state_dict(torch.load(FLAGS.checkpoint), strict=False)
     model = model.cuda()
+else:
+    model.load_state_dict(torch.load(FLAGS.checkpoint,
+                                     map_location=torch.device('cpu')),
+                          strict=False)
 print('---- Model Created')
 
 model.load_state_dict(torch.load(FLAGS.checkpoint))
