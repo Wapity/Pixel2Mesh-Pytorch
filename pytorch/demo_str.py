@@ -29,7 +29,7 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='data/checkpoints/last_checkpoint.pt')  # change with str
+                  default='temp/STR/03-30_16-17-34/epoch_20/last_checkpoint.pt')  # put in checkpoint
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,

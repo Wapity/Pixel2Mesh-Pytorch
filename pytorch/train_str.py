@@ -21,20 +21,20 @@ args = argparse.ArgumentParser()
 args.add_argument('--training_data',
                   help='Training data.',
                   type=str,
-                  default='data/training_data/train_list_str_main.txt')
+                  default='data/training_data/list_stereo_full.txt')
 args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
                   default='data/testing_data/test_list_str.txt')
-args.add_argument('--batch_size', help='Batch size.', type=int, default=16)
+args.add_argument('--batch_size', help='Batch size.', type=int, default=8)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
-                  default=4.5e-5)
+                  default=1e-4)  # before 4.5e-5
 args.add_argument('--learning_rate_decay',
                   help='Learning rate.',
                   type=float,
-                  default=0.99)
+                  default=0.98)
 args.add_argument('--learning_rate_every',
                   help='Learning rate.',
                   type=int,
@@ -46,11 +46,11 @@ args.add_argument('--show_every',
 args.add_argument('--weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
-                  default=5e-6)
+                  default=1e-6)
 args.add_argument('--epochs',
                   help='Number of epochs to train.',
                   type=int,
-                  default=11)
+                  default=20)
 args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
@@ -58,7 +58,7 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='temp/STR/03-28_07-26-53/epoch_11/last_checkpoint.pt'
+                  default='temp/STR/03-28_19-22-59/epoch_20/last_checkpoint.pt'
                  )  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
