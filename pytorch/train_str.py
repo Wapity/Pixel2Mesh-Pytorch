@@ -30,7 +30,7 @@ args.add_argument('--batch_size', help='Batch size.', type=int, default=8)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
-                  default=4.5e-5)
+                  default=1e-4)  # before 4.5e-5
 args.add_argument('--learning_rate_decay',
                   help='Learning rate.',
                   type=float,
@@ -59,7 +59,7 @@ args.add_argument(
     '--checkpoint',
     help='Checkpoint to use.',
     type=str,
-    default='temp/STR/03-30_16-17-34/epoch_20/last_checkpoint.pt')  # rechanged #changed
+    default='temp/STR/03-28_19-22-59/epoch_20/last_checkpoint.pt')  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
