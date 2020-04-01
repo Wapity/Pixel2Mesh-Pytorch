@@ -29,7 +29,7 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='temp/STR/03-30_16-17-34/epoch_20/last_checkpoint.pt')
+                  default='data/checkpoints/last_str_checkpoint.pt')
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
@@ -55,8 +55,13 @@ print('---- Build initial ellispoid info')
 model = GCN(tensor_dict, FLAGS)
 print('---- Model Created')
 
-model.load_state_dict(
-    torch.load(FLAGS.checkpoint, map_location=torch.device('cpu')))
+if use_cuda:
+    model.load_state_dict(torch.load(FLAGS.checkpoint), strict=False)
+    model = model.cuda()
+else:
+    model.load_state_dict(torch.load(FLAGS.checkpoint,
+                                     map_location=torch.device('cpu')),
+                          strict=False)
 print('---- Model loaded from checkpoint')
 
 img_inp_1 = load_image(FLAGS.image)
