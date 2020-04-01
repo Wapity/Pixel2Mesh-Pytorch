@@ -8,7 +8,6 @@ from p2m.external.fscore import fscore
 import argparse
 from datetime import datetime
 use_cuda = torch.cuda.is_available()
-
 # Set random seed
 seed = 1024
 np.random.seed(seed)
@@ -54,8 +53,13 @@ print('---- Build initial ellispoid info')
 model = GCN(tensor_dict, FLAGS)
 print('---- Model Created')
 
-model.load_state_dict(
-    torch.load(FLAGS.checkpoint, map_location=torch.device('cpu')))
+if use_cuda:
+    model.load_state_dict(torch.load(FLAGS.checkpoint), strict=False)
+    model = model.cuda()
+else:
+    model.load_state_dict(torch.load(FLAGS.checkpoint,
+                                     map_location=torch.device('cpu')),
+                          strict=False)
 print('---- Model loaded from checkpoint')
 
 data = DataFetcher(FLAGS.f1_data)
