@@ -1,7 +1,8 @@
 data/testing_data/plane.png
 data/testing_data/car.png
-data/testing_data/chair.png
-data/testing_data/gun.png
-data/testing_data/square.png
-data/testing_data/plane_bis.png
+data/testing_data/chair_03.png
+data/testing_data/gun_03.png
 data/testing_data/table.png
+data/testing_data/couch_03.png
+data/testing_data/desk_00.png
+data/testing_data/sound_bass_00.png
