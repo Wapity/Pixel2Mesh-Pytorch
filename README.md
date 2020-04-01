@@ -1,19 +1,19 @@
 # Pixel2Mesh-Pytorch-TUM
 
 Put ShapeNetP2M in the data/training_data folder
-
+///////
 To train the ResNet+GCN with a single image :
 ```
-python train_res.py 
+python train_res.py
 ```
-or 
+or
 ```
-train_str.py 
+train_str.py
 ```
 to train the ResNet+GCN with two images :
 
 ```
-python str_res.py 
+python str_res.py
 ```
 To train one can specify parameters, type
 ```

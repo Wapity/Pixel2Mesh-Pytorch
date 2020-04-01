@@ -1,2 +1,10 @@
-data/training_data/abcd/rendering/00.dat
-data/training_data/abcd/rendering/00.dat
+data/training_data/ShapeNetP2M/04256520/3a44efd1fd14ea66dfa4ff010b8b9d1c/rendering/00.dat
+data/training_data/ShapeNetP2M/03211117/99ab7f145618ec841a1272c8e47f5670/rendering/00.dat
+data/training_data/ShapeNetP2M/03001627/6893a0aac52e31a3578fec929fed235d/rendering/00.dat
+data/training_data/ShapeNetP2M/04256520/1b17f84df81e0165e336453ccee6eebc/rendering/00.dat
+data/training_data/ShapeNetP2M/04256520/8ea0e8e7a863b6dab2302e21338c08b/rendering/00.dat
+data/training_data/ShapeNetP2M/04256520/34a2341fbd255d82b8a06a6203bc49a9/rendering/00.dat
+data/training_data/ShapeNetP2M/04256520/46c6d2fb8c92cba419fb4103277a6b93/rendering/00.dat
+data/training_data/ShapeNetP2M/04256520/173d2bf95fb2e6353a9b2e04441ce376/rendering/00.dat
+data/training_data/ShapeNetP2M/04256520/951e63303cf5eed1cd4a89b0fee32930/rendering/00.dat
+data/training_data/ShapeNetP2M/04256520/628f7a321ce4f90fcf01bc59d215f0/rendering/00.dat
