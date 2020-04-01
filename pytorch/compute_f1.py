@@ -73,6 +73,8 @@ for iters in range(data_number):
     img_inp, y_train, data_id = data.fetch()
     img_inp, y_train = process_input(img_inp, y_train)
     gt_points = y_train[:, :3]
+    if use_cuda:
+        img_inp, y_train = img_inp.cuda(), y_train.cuda()
     pred_points = model(img_inp)[-1]
     dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0),
                                      gt_points.unsqueeze(0))
@@ -82,8 +84,8 @@ dist1 = torch.stack(all_dist_1)
 dist2 = torch.stack(all_dist_2)
 
 threshold = 0.0001
-score_f1 = fscore(dist1, dist2, threshold)[0].mean().item()
+score_f1 = fscore(dist1, dist2, threshold)[0].mean().detach().cpu().item()
 print('------> threshold = {}, fscore = {}'.format(threshold, score_f1))
 threshold = 0.0002
-score_f1 = fscore(dist1, dist2, threshold)[0].mean().item()
+score_f1 = fscore(dist1, dist2, threshold)[0].mean().detach().cpu().item()
 print('------> threshold = {}, fscore = {}'.format(threshold, score_f1))
