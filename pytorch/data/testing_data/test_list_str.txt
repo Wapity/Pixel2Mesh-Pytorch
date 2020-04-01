@@ -1,4 +1,4 @@
-data/testing_data/plane_00.png,data/testing_data/plane_03.png
+data/testing_data/plane_00_.png,data/testing_data/plane_04_.png
 data/testing_data/car_00.png,data/testing_data/car_03.png
 data/testing_data/chair_00.png,data/testing_data/chair_03.png
 data/testing_data/couch_00.png,data/testing_data/couch_03.png
