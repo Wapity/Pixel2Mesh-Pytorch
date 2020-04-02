@@ -1,5 +1,5 @@
 *.pyc
-pytorch/data/checkpoints/*
+pytorch/data/checkpoints/last_checkpoint_str.pt
 pytorch/temp/RES/*
 pytorch/temp/STR/*
 pytorch/data/training_data/ShapeNetP2M/*
