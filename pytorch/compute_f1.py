@@ -69,7 +69,7 @@ data_number = data.number
 print('---- Loadind f1 data, {} num samples'.format(data_number))
 
 
-def fscore(d1, d2):
+def fscore(d1, d2, threshold):
     precision_1 = torch.mean((dist1 < threshold).float())
     precision_2 = torch.mean((dist2 < threshold).float())
     f_score = 2 * precision_1 * precision_2 / (precision_1 + precision_2)
