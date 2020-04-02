@@ -15,7 +15,7 @@ torch.manual_seed(seed)
 
 # Settings
 args = argparse.ArgumentParser()
-
+args.add_argument('--num_samples', help='num samples', type=int, default=1000)
 args.add_argument('--f1_data',
                   help='F1 score data.',
                   type=str,
@@ -62,7 +62,7 @@ else:
                           strict=False)
 print('---- Model loaded from checkpoint')
 
-data = DataFetcher(FLAGS.f1_data)
+data = DataFetcher(FLAGS.f1_data, compute_f1=FLAGS.num_samples)
 data.setDaemon(True)
 data.start()
 data_number = data.number
@@ -76,8 +76,9 @@ for iters in range(data_number):
     if use_cuda:
         img_inp, y_train = img_inp.cuda(), y_train.cuda()
     pred_points = model(img_inp)[-1]
-    dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0).cuda(),
-                                     gt_points.unsqueeze(0).cuda())
+    dist1, dist2, _, _ = distChamfer(
+        pred_points.unsqueeze(0).cuda(),
+        gt_points.unsqueeze(0).cuda())
     all_dist_1.append(dist1.squeeze(0))
     all_dist_2.append(dist2.squeeze(0))
 dist1 = torch.stack(all_dist_1)
