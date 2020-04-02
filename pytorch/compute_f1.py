@@ -53,13 +53,9 @@ print('---- Build initial ellispoid info')
 model = GCN(tensor_dict, FLAGS)
 print('---- Model Created')
 
-if use_cuda:
-    model.load_state_dict(torch.load(FLAGS.checkpoint), strict=False)
-    model = model.cuda()
-else:
-    model.load_state_dict(torch.load(FLAGS.checkpoint,
-                                     map_location=torch.device('cpu')),
-                          strict=False)
+model.load_state_dict(torch.load(FLAGS.checkpoint,
+                                 map_location=torch.device('cpu')),
+                      strict=False)
 print('---- Model loaded from checkpoint')
 
 data = DataFetcher(FLAGS.f1_data)
@@ -74,10 +70,10 @@ for iters in range(data_number):
     img_inp, y_train = process_input(img_inp, y_train)
     gt_points = y_train[:, :3]
     if use_cuda:
-        img_inp, y_train = img_inp.cuda(), y_train.cuda()
+        img_inp, y_train = img_inp, y_train
     pred_points = model(img_inp)[-1]
-    dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0).cuda(),
-                                     gt_points.unsqueeze(0).cuda())
+    dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0),
+                                     gt_points.unsqueeze(0))
     all_dist_1.append(dist1.squeeze(0))
     all_dist_2.append(dist2.squeeze(0))
 dist1 = torch.stack(all_dist_1)
