@@ -46,7 +46,7 @@ class DataFetcher(threading.Thread):
                     self.pkl_list.append(line)
         np.random.shuffle(self.pkl_list)
         if compute_f1 > 0:
-            self._pkl_list = self._pkl_list[:compute_f1]
+            self.pkl_list = self.pkl_list[:compute_f1]
         self.index = 0
         self.number = len(self.pkl_list)
 
