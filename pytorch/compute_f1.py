@@ -73,7 +73,7 @@ def fscore(d1, d2, threshold):
     precision_1 = torch.mean((dist1 < threshold).float())
     precision_2 = torch.mean((dist2 < threshold).float())
     f_score = 2 * precision_1 * precision_2 / (precision_1 + precision_2)
-    return f_score
+    return f_score.detach().cpu().item()
 
 
 f1_tau, f2_tau = [], []
@@ -98,8 +98,8 @@ with torch.no_grad():
             dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0),
                                              gt_points.unsqueeze(0))
 
-        f1_tau.append(fscore(dist1, dist2, 0.0001)[0].detach().cpu().item())
-        f1_2tau.append(fscore(dist1, dist2, 0.0002)[0].detach().cpu().item())
+        f1_tau.append(fscore(dist1, dist2, 0.0001)[0])
+        f1_2tau.append(fscore(dist1, dist2, 0.0002)[0])
         print('Sample = {}, f1_tau = {:.2f}, f1_2tau = {:.2f}'.format(
             iters + 1, f1_tau[-1], f1_2tau[-1]))
     score_f1 = np.mean(f1_tau)
