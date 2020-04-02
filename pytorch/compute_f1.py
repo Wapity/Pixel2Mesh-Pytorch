@@ -88,6 +88,8 @@ with torch.no_grad():
         else:
             dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0),
                                              gt_points.unsqueeze(0))
+        print(dist1.shape, dist2.shape)
+
         f1_tau.append(
             fscore(dist1.unsqueeze(0), dist2.unsqueeze(0),
                    0.0001)[0].detach().cpu().item())
