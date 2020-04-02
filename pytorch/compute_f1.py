@@ -53,7 +53,7 @@ print('---- Build initial ellispoid info')
 model = GCN(tensor_dict, FLAGS)
 print('---- Model Created')
 
-if use_cuda:
+if False:
     model.load_state_dict(torch.load(FLAGS.checkpoint), strict=False)
     model = model.cuda()
 else:
@@ -72,6 +72,7 @@ all_dist_1, all_dist_2 = [], []
 for iters in range(data_number):
     print(iters)
     img_inp, y_train, data_id = data.fetch()
+    print(img_inp)
     img_inp, y_train = process_input(img_inp, y_train)
     gt_points = y_train[:, :3]
     if use_cuda:
