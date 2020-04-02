@@ -98,8 +98,8 @@ with torch.no_grad():
             dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0),
                                              gt_points.unsqueeze(0))
 
-        f1_tau.append(fscore(dist1, dist2, 0.0001)[0])
-        f1_2tau.append(fscore(dist1, dist2, 0.0002)[0])
+        f1_tau.append(fscore(dist1, dist2, 0.0001))
+        f1_2tau.append(fscore(dist1, dist2, 0.0002))
         print('Sample = {}, f1_tau = {:.2f}, f1_2tau = {:.2f}'.format(
             iters + 1, f1_tau[-1], f1_2tau[-1]))
     score_f1 = np.mean(f1_tau)
