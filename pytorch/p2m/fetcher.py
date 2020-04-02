@@ -25,7 +25,7 @@ import os
 
 class DataFetcher(threading.Thread):
 
-    def __init__(self, file_list, stereo=False):
+    def __init__(self, file_list, stereo=False, compute_f1=-1):
         super(DataFetcher, self).__init__()
         if stereo:
             self.work = self.work_stereo
@@ -40,14 +40,15 @@ class DataFetcher(threading.Thread):
                 line = f.readline().strip()
                 if not line:
                     break
-                print(os.path.isfile(line), '---->', line)
                 if (not stereo) and os.path.isfile(line):
                     self.pkl_list.append(line)
                 if stereo and all([os.path.isfile(l) for l in line.split(',')]):
                     self.pkl_list.append(line)
+        np.random.shuffle(self.pkl_list)
+        if compute_f1 > 0:
+            self._pkl_list = self._pkl_list[:compute_f1]
         self.index = 0
         self.number = len(self.pkl_list)
-        np.random.shuffle(self.pkl_list)
 
     def work_non_stereo(self, idx):
         pkl_path = self.pkl_list[idx]
