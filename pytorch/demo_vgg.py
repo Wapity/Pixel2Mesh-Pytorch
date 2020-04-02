@@ -16,7 +16,7 @@ args = argparse.ArgumentParser()
 args.add_argument('--image',
                   help='Testing image.',
                   type=str,
-                  default='data/examples/square.png')
+                  default='data/testing_data/couch_03.png')
 args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
@@ -68,7 +68,7 @@ mesh = process_output(output3)
 print('---- Mesh created applied to image')
 
 pred_path = FLAGS.image.replace('.png', '.obj').replace(
-    'examples/',
+    'testing_data/',
     'outputs/vgg_{}_'.format(datetime.now().strftime('%m-%d_%H-%M')))
 np.savetxt(pred_path, mesh, fmt='%s', delimiter=' ')
 print('---> Saved mesh to     : ', pred_path)

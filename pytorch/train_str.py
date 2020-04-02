@@ -21,7 +21,7 @@ args = argparse.ArgumentParser()
 args.add_argument('--training_data',
                   help='Training data.',
                   type=str,
-                  default='data/training_data/list_stereo_full.txt')
+                  default='data/training_data/trainer_stereo.txt')
 args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
@@ -58,7 +58,7 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='temp/STR/03-31_10-55-04/epoch_6/last_checkpoint.pt'
+                  default='data/checkpoints/last_checkpoint_str.pt'
                   )  # rechanged #changed
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',

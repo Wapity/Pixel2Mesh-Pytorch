@@ -17,11 +17,11 @@ args = argparse.ArgumentParser()
 args.add_argument('--image',
                   help='Testing image.',
                   type=str,
-                  default='data/examples/square.png')
+                  default='data/testing_data/couch_00.png')
 args.add_argument('--image_bis',
                   help='Testing image.',
                   type=str,
-                  default='data/examples/square.png')
+                  default='data/testing_data/couch_03.png')
 args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
@@ -29,7 +29,7 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='data/checkpoints/last_str_checkpoint.pt')
+                  default='data/checkpoints/last_checkpoint_str.pt')
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
@@ -68,7 +68,7 @@ img_inp_1 = load_image(FLAGS.image)
 print('<--- Loaded image 1 from : ', FLAGS.image)
 
 img_inp_2 = load_image(FLAGS.image_bis)
-print('<--- Loaded image 2 from : ', FLAGS.image)
+print('<--- Loaded image 2 from : ', FLAGS.image_bis)
 
 output3 = model(img_inp_1, img_inp_2)[-1]
 print('---- Model applied to image')
@@ -77,7 +77,7 @@ mesh = process_output(output3)
 print('---- Mesh created applied to image')
 
 pred_path = FLAGS.image.replace('.png', '.obj').replace(
-    'examples/',
+    'testing_data/',
     'outputs/str_{}_'.format(datetime.now().strftime('%m-%d_%H-%M')))
 np.savetxt(pred_path, mesh, fmt='%s', delimiter=' ')
 print('---> Saved mesh to     : ', pred_path)
