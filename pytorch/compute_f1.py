@@ -70,6 +70,7 @@ print('---- Loadind f1 data, {} num samples'.format(data_number))
 
 all_dist_1, all_dist_2 = [], []
 for iters in range(data_number):
+    print(iters)
     img_inp, y_train, data_id = data.fetch()
     img_inp, y_train = process_input(img_inp, y_train)
     gt_points = y_train[:, :3]
