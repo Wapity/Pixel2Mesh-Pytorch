@@ -15,7 +15,7 @@ torch.manual_seed(seed)
 
 # Settings
 args = argparse.ArgumentParser()
-args.add_argument('--num_samples', help='num samples', type=int, default=10)
+args.add_argument('--num_samples', help='num samples', type=int, default=1000)
 args.add_argument('--f1_data',
                   help='F1 score data.',
                   type=str,
