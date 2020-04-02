@@ -88,17 +88,17 @@ with torch.no_grad():
         else:
             dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0),
                                              gt_points.unsqueeze(0))
-        print(dist1.shape, dist2.shape)
+        print(dist1.shape, dist2.shape, y_train.shape, pred_points.shape)
 
-        f1_tau.append(
-            fscore(dist1.unsqueeze(0), dist2.unsqueeze(0),
-                   0.0001)[0].detach().cpu().item())
-        f1_2tau.append(
-            fscore(dist1.unsqueeze(0), dist2.unsqueeze(0),
-                   0.0002)[0].detach().cpu().item())
-        print('Sample = {}, f1_tau = {:.2f}, f1_2tau = {:.2f}'.format(
-            iters + 1, f1_tau[-1], f1_2tau[-1]))
-    score_f1 = np.mean(f1_tau)
-    print('------> threshold = {}, fscore = {}'.format(0.0001, score_f1))
-    score_f1 = np.mean(f1_2tau)
-    print('------> threshold = {}, fscore = {}'.format(0.0002, score_f1))
+    #     f1_tau.append(
+    #         fscore(dist1.unsqueeze(0), dist2.unsqueeze(0),
+    #                0.0001)[0].detach().cpu().item())
+    #     f1_2tau.append(
+    #         fscore(dist1.unsqueeze(0), dist2.unsqueeze(0),
+    #                0.0002)[0].detach().cpu().item())
+    #     print('Sample = {}, f1_tau = {:.2f}, f1_2tau = {:.2f}'.format(
+    #         iters + 1, f1_tau[-1], f1_2tau[-1]))
+    # score_f1 = np.mean(f1_tau)
+    # print('------> threshold = {}, fscore = {}'.format(0.0001, score_f1))
+    # score_f1 = np.mean(f1_2tau)
+    # print('------> threshold = {}, fscore = {}'.format(0.0002, score_f1))
