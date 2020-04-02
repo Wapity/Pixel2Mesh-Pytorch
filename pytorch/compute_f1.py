@@ -67,8 +67,6 @@ for iters in range(data_number):
     img_inp, y_train, data_id = data.fetch()
     img_inp, y_train = process_input(img_inp, y_train)
     gt_points = y_train[:, :3]
-    if use_cuda:
-        img_inp, y_train = img_inp, y_train
     pred_points = model(img_inp)[-1]
     dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0),
                                      gt_points.unsqueeze(0))
