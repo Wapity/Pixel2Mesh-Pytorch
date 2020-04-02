@@ -44,8 +44,6 @@ class DataFetcher(threading.Thread):
                     self.pkl_list.append(line)
                 if stereo and all([os.path.isfile(l) for l in line.split(',')]):
                     self.pkl_list.append(line)
-                print(all([os.path.isfile(l) for l in line.split(',')]), '-->',
-                      line)
         np.random.shuffle(self.pkl_list)
         if compute_f1 > 0:
             self.pkl_list = self.pkl_list[:compute_f1]

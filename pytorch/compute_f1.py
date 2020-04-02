@@ -62,7 +62,9 @@ else:
                           strict=False)
 print('---- Model loaded from checkpoint')
 
-data = DataFetcher(FLAGS.f1_data, compute_f1=FLAGS.num_samples)
+data = DataFetcher(FLAGS.f1_data,
+                   stereo=FLAGS.cnn_type == 'STR',
+                   compute_f1=FLAGS.num_samples)
 data.setDaemon(True)
 data.start()
 data_number = data.number
