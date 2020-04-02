@@ -77,9 +77,13 @@ for iters in range(data_number):
     if use_cuda:
         img_inp, y_train = img_inp.cuda(), y_train.cuda()
     pred_points = model(img_inp)[-1]
-    dist1, dist2, _, _ = distChamfer(
-        pred_points.unsqueeze(0).cuda(),
-        gt_points.unsqueeze(0).cuda())
+    if use_cuda:
+        dist1, dist2, _, _ = distChamfer(
+            pred_points.unsqueeze(0).cuda(),
+            gt_points.unsqueeze(0).cuda())
+    else:
+        dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0),
+                                         gt_points.unsqueeze(0))
     all_dist_1.append(dist1.squeeze(0))
     all_dist_2.append(dist2.squeeze(0))
 dist1 = torch.stack(all_dist_1)
