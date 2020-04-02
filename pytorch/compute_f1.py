@@ -23,11 +23,11 @@ args.add_argument('--f1_data',
 args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
-                  default='STR')
+                  default='VGG')
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='data/checkpoints/last_str_checkpoint.pt')
+                  default='data/checkpoints/tf_vgg_checkpoint.pt')
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
