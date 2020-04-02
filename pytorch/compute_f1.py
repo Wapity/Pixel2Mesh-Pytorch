@@ -53,7 +53,7 @@ print('---- Build initial ellispoid info')
 model = GCN(tensor_dict, FLAGS)
 print('---- Model Created')
 
-if False:
+if use_cuda:
     model.load_state_dict(torch.load(FLAGS.checkpoint), strict=False)
     model = model.cuda()
 else:
@@ -68,31 +68,35 @@ data.start()
 data_number = data.number
 print('---- Loadind f1 data, {} num samples'.format(data_number))
 
-all_dist_1, all_dist_2 = [], []
-for iters in range(data_number):
-    print(iters)
-    torch.cuda.empty_cache()
-    img_inp, y_train, data_id = data.fetch()
-    img_inp, y_train = process_input(img_inp, y_train)
-    gt_points = y_train[:, :3]
-    if use_cuda:
-        img_inp, y_train = img_inp.cuda(), y_train.cuda()
-    pred_points = model(img_inp)[-1]
-    if use_cuda:
-        dist1, dist2, _, _ = distChamfer(
-            pred_points.unsqueeze(0).cuda(),
-            gt_points.unsqueeze(0).cuda())
-    else:
-        dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0),
-                                         gt_points.unsqueeze(0))
-    all_dist_1.append(dist1.squeeze(0))
-    all_dist_2.append(dist2.squeeze(0))
-dist1 = torch.stack(all_dist_1)
-dist2 = torch.stack(all_dist_2)
+for param in model.parameters():
+    param.requires_grad = False
+with torch.no_grad():
+    model.eval()
+    all_dist_1, all_dist_2 = [], []
+    for iters in range(data_number):
+        print(iters)
+        torch.cuda.empty_cache()
+        img_inp, y_train, data_id = data.fetch()
+        img_inp, y_train = process_input(img_inp, y_train)
+        gt_points = y_train[:, :3]
+        if use_cuda:
+            img_inp, y_train = img_inp.cuda(), y_train.cuda()
+        pred_points = model(img_inp)[-1]
+        if use_cuda:
+            dist1, dist2, _, _ = distChamfer(
+                pred_points.unsqueeze(0).cuda(),
+                gt_points.unsqueeze(0).cuda())
+        else:
+            dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0),
+                                             gt_points.unsqueeze(0))
+        all_dist_1.append(dist1.squeeze(0))
+        all_dist_2.append(dist2.squeeze(0))
+    dist1 = torch.stack(all_dist_1)
+    dist2 = torch.stack(all_dist_2)
 
-threshold = 0.0001
-score_f1 = fscore(dist1, dist2, threshold)[0].mean().detach().cpu().item()
-print('------> threshold = {}, fscore = {}'.format(threshold, score_f1))
-threshold = 0.0002
-score_f1 = fscore(dist1, dist2, threshold)[0].mean().detach().cpu().item()
-print('------> threshold = {}, fscore = {}'.format(threshold, score_f1))
+    threshold = 0.0001
+    score_f1 = fscore(dist1, dist2, threshold)[0].mean().detach().cpu().item()
+    print('------> threshold = {}, fscore = {}'.format(threshold, score_f1))
+    threshold = 0.0002
+    score_f1 = fscore(dist1, dist2, threshold)[0].mean().detach().cpu().item()
+    print('------> threshold = {}, fscore = {}'.format(threshold, score_f1))
