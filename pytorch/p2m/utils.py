@@ -2,7 +2,7 @@ import numpy as np
 import torch
 from skimage import io, transform
 import pickle
-use_cuda = torch.cuda.is_available()
+use_cuda = False  #torch.cuda.is_available()
 
 
 class AttributeDict(dict):
