@@ -7,7 +7,7 @@ from p2m.external.chamfer_python import distChamfer
 from p2m.external.fscore import fscore
 import argparse
 from datetime import datetime
-use_cuda = torch.cuda.is_available()
+use_cuda = False  #torch.cuda.is_available()
 # Set random seed
 seed = 1024
 np.random.seed(seed)
