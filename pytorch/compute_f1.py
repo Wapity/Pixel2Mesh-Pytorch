@@ -19,11 +19,11 @@ args.add_argument('--num_samples', help='num samples', type=int, default=1000)
 args.add_argument('--f1_data',
                   help='F1 score data.',
                   type=str,
-                  default='data/training_data/trainer_res.txt')
+                  default='data/training_data/trainer_stereo.txt')
 args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
-                  default='RES')
+                  default='STR')
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
@@ -84,12 +84,22 @@ with torch.no_grad():
     all_dist_1, all_dist_2 = [], []
     for iters in range(data_number):
         torch.cuda.empty_cache()
-        img_inp, y_train, data_id = data.fetch()
-        img_inp, y_train = process_input(img_inp, y_train)
-        gt_points = y_train[:, :3]
-        if use_cuda:
-            img_inp, y_train = img_inp.cuda(), y_train.cuda()
-        pred_points = model(img_inp)[-1]
+        if FLAGS.cnn_type != 'STR':
+            img_inp, y_train, data_id = data.fetch()
+            img_inp, y_train = process_input(img_inp, y_train)
+            gt_points = y_train[:, :3]
+            if use_cuda:
+                img_inp, y_train = img_inp.cuda(), y_train.cuda()
+            pred_points = model(img_inp)[-1]
+
+        else:
+            img_inp_1, img_inp_2, y_train, id = data.fetch()
+            img_inp_1, _ = process_input(img_inp_1, y_train)
+            img_inp_2, y_train = process_input(img_inp_2, y_train)
+            if use_cuda:
+                img_inp_1, img_inp_2, y_train = img_inp_1.cuda(
+                ), img_inp_2.cuda(), y_train.cuda()
+            pred_points = model(img_inp_1, img_inp_2)[-1]
         if use_cuda:
             dist1, dist2, _, _ = distChamfer(
                 pred_points.unsqueeze(0).cuda(),
@@ -97,7 +107,6 @@ with torch.no_grad():
         else:
             dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0),
                                              gt_points.unsqueeze(0))
-
         f1_tau.append(fscore(dist1, dist2, 0.0001))
         f2_tau.append(fscore(dist1, dist2, 0.0002))
         print('Sample = {}, f1_tau = {:.2f}, f1_2tau = {:.2f}'.format(
