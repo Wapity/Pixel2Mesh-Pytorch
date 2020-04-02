@@ -102,6 +102,7 @@ with torch.no_grad():
             if use_cuda:
                 img_inp_1, img_inp_2, y_train = img_inp_1.cuda(
                 ), img_inp_2.cuda(), y_train.cuda()
+            print(img_inp_1.shape, img_inp_2.shape)
             pred_points = model(img_inp_1, img_inp_2)[-1][0]
             print(pred_points.shape, y_train.shape)
         if use_cuda:
