@@ -7,7 +7,7 @@ from p2m.external.chamfer_python import distChamfer
 from p2m.external.fscore import fscore
 import argparse
 from datetime import datetime
-use_cuda = False  #torch.cuda.is_available()
+use_cuda = torch.cuda.is_available()
 # Set random seed
 seed = 1024
 np.random.seed(seed)
@@ -71,6 +71,7 @@ print('---- Loadind f1 data, {} num samples'.format(data_number))
 all_dist_1, all_dist_2 = [], []
 for iters in range(data_number):
     print(iters)
+    torch.cuda.empty_cache()
     img_inp, y_train, data_id = data.fetch()
     img_inp, y_train = process_input(img_inp, y_train)
     gt_points = y_train[:, :3]
