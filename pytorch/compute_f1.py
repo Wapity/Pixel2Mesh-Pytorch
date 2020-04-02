@@ -15,7 +15,7 @@ torch.manual_seed(seed)
 
 # Settings
 args = argparse.ArgumentParser()
-args.add_argument('--num_samples', help='num samples', type=int, default=1000)
+args.add_argument('--num_samples', help='num samples', type=int, default=10)
 args.add_argument('--f1_data',
                   help='F1 score data.',
                   type=str,
@@ -67,14 +67,13 @@ data.setDaemon(True)
 data.start()
 data_number = data.number
 print('---- Loadind f1 data, {} num samples'.format(data_number))
-
+f1_tau, f2_tau = [], []
 for param in model.parameters():
     param.requires_grad = False
 with torch.no_grad():
     model.eval()
     all_dist_1, all_dist_2 = [], []
     for iters in range(data_number):
-        print(iters)
         torch.cuda.empty_cache()
         img_inp, y_train, data_id = data.fetch()
         img_inp, y_train = process_input(img_inp, y_train)
@@ -89,14 +88,15 @@ with torch.no_grad():
         else:
             dist1, dist2, _, _ = distChamfer(pred_points.unsqueeze(0),
                                              gt_points.unsqueeze(0))
-        all_dist_1.append(dist1.squeeze(0))
-        all_dist_2.append(dist2.squeeze(0))
-    dist1 = torch.stack(all_dist_1)
-    dist2 = torch.stack(all_dist_2)
-
-    threshold = 0.0001
-    score_f1 = fscore(dist1, dist2, threshold)[0].mean().detach().cpu().item()
-    print('------> threshold = {}, fscore = {}'.format(threshold, score_f1))
-    threshold = 0.0002
-    score_f1 = fscore(dist1, dist2, threshold)[0].mean().detach().cpu().item()
-    print('------> threshold = {}, fscore = {}'.format(threshold, score_f1))
+        f1_tau.append(
+            score(dist1.unsqueeze(0), dist2.unsqueeze(0),
+                  0.0001)[0].detach().cpu().item())
+        f1_2tau.append(
+            score(dist1.unsqueeze(0), dist2.unsqueeze(0),
+                  0.0002)[0].detach().cpu().item())
+        print('Sample = {}, f1_tau = {:.2f}, f1_2tau = {:.2f}'.format(
+            iters + 1, f1_tau[-1], f1_2tau[-1]))
+    score_f1 = np.mean(f1_tau)
+    print('------> threshold = {}, fscore = {}'.format(0.0001, score_f1))
+    score_f1 = np.mean(f1_2tau)
+    print('------> threshold = {}, fscore = {}'.format(0.0002, score_f1))
