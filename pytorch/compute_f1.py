@@ -89,7 +89,6 @@ with torch.no_grad():
         if FLAGS.cnn_type != 'STR':
             img_inp, y_train, data_id = data.fetch()
             img_inp, y_train = process_input(img_inp, y_train)
-            gt_points = y_train[:, :3]
             if use_cuda:
                 img_inp, y_train = img_inp.cuda(), y_train.cuda()
             pred_points = model(img_inp)[-1]
@@ -98,14 +97,14 @@ with torch.no_grad():
             img_inp_1, img_inp_2, y_train, id = data.fetch()
             img_inp_1, _ = process_input(img_inp_1, y_train)
             img_inp_2, y_train = process_input(img_inp_2, y_train)
-            gt_points = y_train[:, :3]
+
             img_inp_1, img_inp_2 = img_inp_1.unsqueeze(0), img_inp_2.unsqueeze(
                 0)
             if use_cuda:
                 img_inp_1, img_inp_2, y_train = img_inp_1.cuda(
                 ), img_inp_2.cuda(), y_train.cuda()
             pred_points = model(img_inp_1, img_inp_2)[-1][0]
-            print(pred_points.shape, y_train.shape)
+        gt_points = y_train[:, :3]
         if use_cuda:
             dist1, dist2, _, _ = distChamfer(
                 pred_points.unsqueeze(0).cuda(),
