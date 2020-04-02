@@ -98,6 +98,7 @@ with torch.no_grad():
             img_inp_1, img_inp_2, y_train, id = data.fetch()
             img_inp_1, _ = process_input(img_inp_1, y_train)
             img_inp_2, y_train = process_input(img_inp_2, y_train)
+            gt_points = y_train[:, :3]
             img_inp_1, img_inp_2 = img_inp_1.unsqueeze(0), img_inp_2.unsqueeze(
                 0)
             if use_cuda:
