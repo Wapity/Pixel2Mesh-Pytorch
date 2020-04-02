@@ -40,6 +40,7 @@ class DataFetcher(threading.Thread):
                 line = f.readline().strip()
                 if not line:
                     break
+                print(os.path.isfile(line), '---->', line)
                 if (not stereo) and os.path.isfile(line):
                     self.pkl_list.append(line)
                 if stereo and all([os.path.isfile(l) for l in line.split(',')]):
