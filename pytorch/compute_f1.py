@@ -23,7 +23,7 @@ args.add_argument('--f1_data',
 args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
-                  default='RES')
+                  default='STR')
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
