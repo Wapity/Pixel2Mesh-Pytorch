@@ -1,7 +1,7 @@
 # Pixel2Mesh-Pytorch-TUM
 
 1) Install required packages in requirements.txt
-2) Download the dataset using download.py
+2) Download the dataset using download.py and unzip the files
 3) For training : 
 - VGG : 
 ```python
