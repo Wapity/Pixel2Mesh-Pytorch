@@ -9,19 +9,20 @@ urls = [
 ]
 
 urls = [url.replace('open', 'uc') for url in urls]
-for id, url in enumerate(urls):
+for id, url in enumerate(urls[:-1]):
     output = 'training_data.00{}'.format(id + 1)
     print('Donwloading {} ...'.format(output))
     gdown.download(url, output, quiet=False)
 
+output = 'Test'
+print('Donwloading {} ...'.format(output))
+gdown.download(urls[-1], output, quiet=False)
 
 commands = ['mkdir pytorch/data/training_data/ShapeNetP2M/',
             'mv training_data.001 pytorch/data/training_data/ShapeNetP2M/',
             'mv training_data.002 pytorch/data/training_data/ShapeNetP2M/',
             'mv training_data.003 pytorch/data/training_data/ShapeNetP2M/',
             'mv training_data.004 pytorch/data/training_data/ShapeNetP2M/',
-            'cd pytorch/data/training_data/ShapeNetP2M/',
-            'unzip training_data.001', 'unzip training_data.002', 'unzip training_data.003',
-            'unzip training_data.004']
+            'mv Test pytorch/data/training_data/']
 for command in commands:
     subprocess.check_call(command.split())
