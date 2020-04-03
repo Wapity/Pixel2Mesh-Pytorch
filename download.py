@@ -1,11 +1,12 @@
 import gdown
 import subprocess
-
+# 'https://drive.google.com/open?id=1dKM_6sR7SCdDQXX8dIQwtpaW3qRiA7pM',
+# 'https://drive.google.com/open?id=1hXq-kxEsDA0_DzcOFS0yzIvlKxwcgoGZ',
+# 'https://drive.google.com/uc?id=1R69tifYSd3SRe7357ppljmU7l_WX7Wxt',
+# 'https://drive.google.com/uc?id=1BzxmQlDDiXOClxkF6I2rskK8-dl2nJdV'
 urls = [
-    'https://drive.google.com/open?id=1dKM_6sR7SCdDQXX8dIQwtpaW3qRiA7pM',
-    'https://drive.google.com/open?id=1hXq-kxEsDA0_DzcOFS0yzIvlKxwcgoGZ',
-    'https://drive.google.com/uc?id=1R69tifYSd3SRe7357ppljmU7l_WX7Wxt',
-    'https://drive.google.com/uc?id=1BzxmQlDDiXOClxkF6I2rskK8-dl2nJdV'
+
+    'https://drive.google.com/open?id=1tA6Vc30CdTq7QnKqxUzejY1w8gy-uFDm'
 ]
 
 urls = [url.replace('open', 'uc') for url in urls]
