@@ -12,7 +12,7 @@ urls = [
 urls = [url.replace('open', 'uc') for url in urls]
 for id, url in enumerate(urls[:-1]):
     output = 'training_data.00{}'.format(id + 1)
-    print('Donwloading {} ...'.format(output))
+    print('Downloading {} ...'.format(output))
     gdown.download(url, output, quiet=False)
 
 output = 'Test.zip'
