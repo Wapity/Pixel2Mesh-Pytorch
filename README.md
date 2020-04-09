@@ -43,5 +43,6 @@ The testing data is put in data/Test for computing the F-scores.
 
 After each epoch of training, checkpoints and outputs are saved in temp/RES or temp/STR. \
 The outputs are based on the testing lists test_list.txt for ResNet and test_list_str.txt for Stereo-ResNet. \
-In data/ckeckpoints are placed the final checkpoints for running the demos of the models or mre training. 
+In data/ckeckpoints are placed the final checkpoints for running the demos of the models or more training. 
+Change the path in args in respective script to use appropriate checkpoint.
 
