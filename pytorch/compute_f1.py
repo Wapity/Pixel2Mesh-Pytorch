@@ -19,11 +19,11 @@ args.add_argument('--num_samples', help='num samples', type=int, default=1000)
 args.add_argument('--f1_data',
                   help='F1 score data.',
                   type=str,
-                  default='data/training_data/f1_list_stereo.txt')
+                  default='data/testing_data/f1_list.txt')
 args.add_argument('--cnn_type',
                   help='Type of Neural Network',
                   type=str,
-                  default='STR')
+                  default='RES')
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
