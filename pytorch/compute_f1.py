@@ -27,8 +27,8 @@ args.add_argument('--cnn_type',
 args.add_argument('--checkpoint',
                   help='Checkpoint to use.',
                   type=str,
-                  default='data/checkpoints/last_checkpoint_res.pt')
-                  
+                  default='data/checkpoints/last_res_checkpoint.pt')
+
 args.add_argument('--info_ellipsoid',
                   help='Initial Ellipsoid info',
                   type=str,
