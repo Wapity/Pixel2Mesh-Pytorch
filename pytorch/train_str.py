@@ -26,7 +26,7 @@ args.add_argument('--testing_data',
                   help='Testing data.',
                   type=str,
                   default='data/testing_data/test_list_str.txt')
-args.add_argument('--batch_size', help='Batch size.', type=int, default=8)
+args.add_argument('--batch_size', help='Batch size.', type=int, default=25)
 args.add_argument('--learning_rate',
                   help='Learning rate.',
                   type=float,
@@ -46,7 +46,7 @@ args.add_argument('--show_every',
 args.add_argument('--weight_decay',
                   help='Weight decay for L2 loss.',
                   type=float,
-                  default=1e-6)
+                  default=1e-5)
 args.add_argument('--epochs',
                   help='Number of epochs to train.',
                   type=int,
