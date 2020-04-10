@@ -39,7 +39,7 @@ A complete list of training data can be found in data/training_data/trainer_res.
 The training data is placed in data/ShapeNet/ and contains large samples of the full dataset.
 The testing data is placed in data/Test which is used for computing F-scores.
 
-After every epoch of training, checkpoints and outputs are saved into corresponding folder in temp/, depending on which model is being trained.
+After every epoch of training, checkpoints and outputs are saved into corresponding folder in temp/RES or temp/STR, depending on which model is being trained. A folder is created with name the date it has been created so we can easily compare current results wiith previous epochs.
 Outputs are based on the testing lists, test_list.txt for ResNet and test_list_str.txt for Stereo-ResNet.
 Before running the demos or continuing training, the most recent checkpoint must be placed into data/checkpoints.
 The path in args can be changed of the respective script to use the appropriate checkpoint.
