@@ -42,4 +42,4 @@ The testing data is placed in data/Test which is used for computing F-scores.
 After every epoch of training, checkpoints and outputs are saved into corresponding folder in temp/RES or temp/STR, depending on which model is being trained. A folder is created with name the date it has been created so we can easily compare current results wiith previous epochs.
 Outputs are based on the testing lists, test_list.txt for ResNet and test_list_str.txt for Stereo-ResNet.
 Before running the demos or continuing training, the most recent checkpoint must be placed into data/checkpoints.
-The path in args can be changed of the respective script to use the appropriate checkpoint.
+The path in args can be changed in the respective script to use the appropriate checkpoint.
