@@ -1,8 +1,10 @@
 # Pixel2Mesh-Pytorch-TUM
+## Requirements
+Install required packages in requirements.txt
+## Dataset
+Download the dataset using download.py and unzip the files
 
-1) Install required packages in requirements.txt
-2) Download the dataset using download.py and unzip the files
-3) For training : 
+## Training 
 - VGG : 
 ```python
 python3 train_vgg.py
@@ -15,7 +17,7 @@ python3 train_res.py
 ```python
 python3 train_str.py
 ```
-4) For demo :
+## Demo 
 - VGG : 
 ```python
 python3 demo_vgg.py
@@ -30,7 +32,7 @@ python3 demo_str.py
 ```
 Change locations of checkpoints or testing list 
 
-5) Compute the F-scores on the test set :
+## Compute the F-scores on the test set 
 ```python
 python3 compute_f1.py
 ```
