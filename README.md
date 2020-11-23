@@ -9,7 +9,7 @@ The training data is placed in data/ShapeNet/ and contains large samples of the 
 The testing data is placed in data/Test which is used for computing F-scores.
 
 ## Training 
-- VGG or ResNet
+- VGG or ResNet :
 ```python
 python3 train_res.py
 ```
