@@ -1,4 +1,4 @@
-# Pixel2Mesh-Pytorch-TUM
+# Pixel2Mesh-Pytorch
 Improved Pytorch version of Tensorflow Pixel2Mesh that converts 2D RGB Images in 3D Meshes, with ResNet for perceptual feature pooling network and Stereo Input of RGB Images under different angles of camera. 
 ## Requirements
 Install required packages in requirements.txt
